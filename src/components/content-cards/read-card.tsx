@@ -79,10 +79,10 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
                 </Button>
             </div>
         )}
-        <div className="h-full flex flex-col" style={innerDivStyle}>
+        <div className="p-6 h-full flex flex-col gap-4" style={innerDivStyle}>
           {/* Category badge and metadata at top */}
-          <div className="p-4 md:p-6 lg:p-8 pb-0">
-            <div className="flex items-center gap-2 md:gap-2.5">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
               <span className="px-3 py-1 text-xs uppercase tracking-wide bg-[#926B7F] text-white rounded-full font-medium">
                 {category}
               </span>
@@ -95,11 +95,10 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
                 </span>
               )}
             </div>
-          </div>
           
           {/* Image if present */}
           {imageUrl && (
-            <div className="relative w-full aspect-video overflow-hidden mt-4 mx-4 md:mx-6 lg:mx-8 rounded-xl">
+            <div className="relative w-full aspect-video overflow-hidden rounded-xl">
               <Image
                 src={imageUrl}
                 alt={title}
@@ -109,18 +108,16 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
             </div>
           )}
           
-          {/* Content section */}
-          <div className="p-4 md:p-6 lg:p-8 flex-grow flex flex-col justify-between">
-            <div className="flex flex-col gap-3 md:gap-4 lg:gap-6">
-              <h2 className="text-4xl font-black" style={{ ...cardTitleStyle, color: CARD_TITLE_COLOR }}>
-                {title}
-              </h2>
-              {summary && <p className="text-sm md:text-base line-clamp-3" style={{ ...cardBodyStyle, color: CARD_BODY_COLOR }}>{summary}</p>}
-            </div>
-            <div className="pt-4 md:pt-5 lg:pt-7 flex-shrink-0">
-              <div className="flex items-center justify-end">
-                <span className="text-[#504c4c] hover:text-neutral-700 transition-colors uppercase tracking-[0.35px] text-xs md:text-sm">Read Full Article →</span>
-              </div>
+            <h2 className="text-4xl font-black" style={{ ...cardTitleStyle, color: CARD_TITLE_COLOR }}>
+              {title}
+            </h2>
+            {summary && <p className="text-sm line-clamp-2" style={{ ...cardBodyStyle, color: CARD_BODY_COLOR }}>{summary}</p>}
+          </div>
+          
+          {/* Read Full Article link */}
+          <div className="px-6 pb-6">
+            <div className="flex items-center justify-end">
+              <span className="text-[#504c4c] hover:text-neutral-700 transition-colors uppercase tracking-[0.35px] text-xs md:text-sm">Read Full Article →</span>
             </div>
           </div>
         </div>
