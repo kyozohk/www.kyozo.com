@@ -30,9 +30,10 @@ export function AudioPostCardSkeleton() {
               <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
               <div className="flex-1">
                 <div className="flex items-center gap-[2px] h-16 md:h-20 lg:h-24">
-                  {[...Array(60)].map((_, i) => (
-                    <Skeleton key={i} className="flex-1 rounded-full" style={{ height: `${Math.random() * 60 + 20}%` }} />
-                  ))}
+                  {[...Array(60)].map((_, i) => {
+                    const height = ((i * 7 + 13) % 60) + 20;
+                    return <Skeleton key={i} className="flex-1 rounded-full" style={{ height: `${height}%` }} />;
+                  })}
                 </div>
               </div>
             </div>
