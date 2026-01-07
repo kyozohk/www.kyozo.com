@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to all files in the community media folder
+    match /community-media/{allPaths=**} {
+      allow read: if true;
+    }
+
+    // Allow authenticated users to write to their own user-specific folders
+    match /posts/{userId}/{allPaths=**} {
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to write to community media folders
+    match /community-media/{communityId}/{allPaths=**} {
+      allow write: if request.auth != null;
+    }
+    
+    // Allow authenticated users to upload member media (for community owners adding/editing members)
+    match /user-media/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null; // Any authenticated user can upload (community owner uploading for members)
+    }
+    
+    // Allow WhatsApp media uploads (from webhook/API)
+    match /whatsapp-media/{allPaths=**} {
+      allow read: if true; // Public read for displaying in inbox
+      allow write: if true; // Allow webhook to upload media
+    }
+  }
+}
