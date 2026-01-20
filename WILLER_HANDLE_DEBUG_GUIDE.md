@@ -21,20 +21,7 @@ Based on the codebase analysis, here are the **most likely issues** and their fi
 ```javascript
 match /communityMembers/{memberId} {
   allow read: if request.auth != null;
-<<<<<<< HEAD
-  
-  // Allow create for anyone (for RSVP forms, signup, etc.)
-  allow create: if true;
-  
-  // Allow update for authenticated users
-  allow update: if request.auth != null;
-  
-  // Allow delete for:
-  // 1. The member themselves, OR
-  // 2. The community owner
-=======
   allow create, update: if request.auth != null;
->>>>>>> wip
   allow delete: if request.auth != null && 
                    (resource.data.userId == request.auth.uid || 
                     isCommunityOwner(resource.data.communityId));
