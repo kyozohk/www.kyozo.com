@@ -9,11 +9,21 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  signInAnonymously as firebaseSignInAnonymously
+  signInAnonymously as firebaseSignInAnonymously,
+  setPersistence,
+  inMemoryPersistence
 } from 'firebase/auth';
 import { app } from './config';
 
 export const auth = getAuth(app);
+
+// Set persistence to in-memory to avoid localStorage usage
+if (typeof window !== 'undefined') {
+  setPersistence(auth, inMemoryPersistence).catch((error) => {
+    console.error('Error setting auth persistence:', error);
+  });
+}
+
 const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {

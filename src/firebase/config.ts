@@ -1,5 +1,17 @@
 import { initializeApp, getApps, getApp, FirebaseOptions } from 'firebase/app';
 
+// Polyfill localStorage for server-side rendering
+if (typeof window === 'undefined') {
+  global.localStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+    key: () => null,
+    length: 0
+  } as Storage;
+}
+
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,

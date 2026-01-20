@@ -107,7 +107,21 @@ function MemberHomeContent() {
       description: "You've been signed out successfully.",
     });
   };
-
+  return (
+    <div className="flex flex-col min-h-screen bg-transparent">
+      <main className="flex-1 flex flex-col items-center justify-center text-center">
+        <div className="py-24 px-4 md:py-32 w-full flex items-center justify-center">
+          <Image 
+            src="/kyozo-logo.svg" 
+            alt="Kyozo Logo" 
+            width={350} 
+            height={350} 
+            priority
+          />
+        </div>
+      </main>
+    </div>
+  );
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       {/* Corner Circle Decoration */}
