@@ -144,3 +144,41 @@ body {
 .animate-curtain-close {
   animation: curtain-close 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .btn-primary {
+    background: #E8DFD1;
+    color: #5B4A3A;
+  }
+
+  .btn-primary:hover {
+    background: #dccdb6;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: #5B4A3A;
+  }
+
+  .btn-ghost:hover {
+    background: #F2EDE8;
+  }
+}

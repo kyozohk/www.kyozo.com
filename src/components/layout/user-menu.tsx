@@ -94,10 +94,10 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:ring-2 hover:ring-[#843484] transition-all">
-          <Avatar className="h-10 w-10 ring-2 ring-[#843484] ring-offset-2">
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:ring-2 hover:ring-[#8A7255] transition-all">
+          <Avatar className="h-10 w-10 ring-2 ring-[#8A7255] ring-offset-2">
             <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
-            <AvatarFallback className="bg-[#843484] text-white font-semibold">{fallback}</AvatarFallback>
+            <AvatarFallback className="bg-[#E8DFD1] text-[#5B4A3A] font-semibold">{fallback}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

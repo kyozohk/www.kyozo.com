@@ -24,8 +24,7 @@ import { useAuthAndDialog } from '@/hooks/use-auth-and-dialog';
 import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
 import { SignupDialog } from '@/components/community/signup-dialog';
 import { PostDetailPanel } from '@/components/community/feed/post-detail-panel';
-import { ChevronDown } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ChevronDown, LogOut } from 'lucide-react';
 
 function PostList({ filter }: { filter: string }) {
   const params = useParams();
@@ -195,6 +194,7 @@ export default function PublicCommunityPage() {
     handleSignUp,
     handleSignIn,
     handleSignInWithGoogle,
+    handleSignOut,
     handleToggleMode
   } = useAuthAndDialog();
 
@@ -254,10 +254,16 @@ export default function PublicCommunityPage() {
 
       setCheckingMembership(true);
       try {
+        console.log('🔎 MEMBERSHIP - Starting check');
+        console.log('🔎 MEMBERSHIP - Handle:', handle);
+        console.log('🔎 MEMBERSHIP - User UID:', user.uid);
+        console.log('🔎 MEMBERSHIP - Community ID:', communityData.communityId);
         const memberDocId = `${user.uid}_${communityData.communityId}`;
+        console.log('🔎 MEMBERSHIP - Member doc id:', memberDocId);
         const memberRef = doc(db, 'communityMembers', memberDocId);
         const memberSnap = await getDoc(memberRef);
         
+        console.log('🔎 MEMBERSHIP - Member doc exists:', memberSnap.exists());
         setIsMember(memberSnap.exists());
       } catch (error) {
         console.error('❌ Error checking membership:', error);
@@ -274,7 +280,12 @@ export default function PublicCommunityPage() {
 
     setJoiningCommunity(true);
     try {
+      console.log('🏘️ JOIN - Starting join');
+      console.log('🏘️ JOIN - Handle:', handle);
+      console.log('🏘️ JOIN - User UID:', user.uid);
+      console.log('🏘️ JOIN - Community ID:', communityData.communityId);
       const memberDocId = `${user.uid}_${communityData.communityId}`;
+      console.log('🏘️ JOIN - Member doc id:', memberDocId);
       const memberRef = doc(db, 'communityMembers', memberDocId);
       
       const memberData = {
@@ -289,12 +300,11 @@ export default function PublicCommunityPage() {
         }
       };
       
+      console.log('🏘️ JOIN - Writing member doc...');
       await setDoc(memberRef, memberData);
+      console.log('✅ JOIN - Member doc written');
       
-      const communityRef = doc(db, 'communities', communityData.communityId);
-      await updateDoc(communityRef, {
-        memberCount: increment(1)
-      });
+      console.log('ℹ️ JOIN - Skipping memberCount update (should be done server-side)');
       
       setIsMember(true);
       alert('Successfully joined the community!');
@@ -370,29 +380,41 @@ export default function PublicCommunityPage() {
               user ? (
                 <>
                   {!checkingMembership && !isMember && (
-                    <Button 
+                    <button
+                      type="button"
                       onClick={handleJoinCommunity}
                       disabled={joiningCommunity}
-                      size="sm"
-                      className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-4"
+                      className="btn btn-primary"
                     >
                       {joiningCommunity ? 'Joining...' : 'Join'}
-                    </Button>
+                    </button>
                   )}
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-700 font-medium">{user.displayName || 'User'}</span>
-                    <Avatar className="h-8 w-8 cursor-pointer">
-                      <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
-                      <AvatarFallback className="bg-purple-100 text-purple-700 text-xs">
-                        {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="btn btn-ghost"
+                    aria-label="Log out"
+                    title="Log out"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button variant="ghost" size="sm" onClick={openSignInDialog} className="text-gray-700 hover:text-gray-900">Sign In</Button>
-                  <Button size="sm" onClick={openSignUpDialog} className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-4">Join</Button>
+                  <button
+                    type="button"
+                    onClick={openSignInDialog}
+                    className="btn btn-ghost"
+                  >
+                    Sign In here
+                  </button>
+                  <button
+                    type="button"
+                    onClick={openSignUpDialog}
+                    className="btn btn-primary"
+                  >
+                    Join Here
+                  </button>
                 </>
               )
             )}

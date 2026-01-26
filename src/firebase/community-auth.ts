@@ -1,7 +1,7 @@
 import { getAuth, setPersistence, inMemoryPersistence } from 'firebase/auth';
-import { communityApp } from './config';
+import { app } from './config';
 
-export const communityAuth = getAuth(communityApp);
+export const communityAuth = getAuth(app);
 
 // Set persistence to in-memory to avoid localStorage usage
 if (typeof window !== 'undefined') {

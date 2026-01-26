@@ -34,7 +34,7 @@ export default function JoinCommunityPage() {
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-200">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-300 border-t-purple-600 mb-4"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#E8DFD1] border-t-[#8A7255] mb-4"></div>
             <h2 className="text-2xl font-bold mb-2 text-gray-900">
               Loading...
             </h2>

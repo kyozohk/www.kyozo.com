@@ -117,6 +117,7 @@ export const AuthAndDialogProvider = ({ children }: { children: ReactNode }) => 
       email: formState.email,
       phone: formState.phone
     });
+    console.log('🔐 SIGNUP - communityAuth.currentUser (before):', communityAuth.currentUser?.uid || null);
 
     if (!formState.agreedToPrivacy) {
         setFormState(prev => ({ ...prev, error: "You must agree to the privacy policy." }));
@@ -128,6 +129,7 @@ export const AuthAndDialogProvider = ({ children }: { children: ReactNode }) => 
       const userCredential = await createUserWithEmailAndPassword(communityAuth, formState.email, formState.password);
       const user = userCredential.user;
       console.log('✅ SIGNUP - User created:', user.uid);
+      console.log('🔐 SIGNUP - communityAuth.currentUser (after create):', communityAuth.currentUser?.uid || null);
       
       await updateProfile(user, { displayName: `${formState.firstName} ${formState.lastName}` });
 
@@ -183,7 +185,11 @@ export const AuthAndDialogProvider = ({ children }: { children: ReactNode }) => 
   const handleSignIn = async () => {
     setFormState(prev => ({ ...prev, error: null }));
     try {
+      console.log('🔐 SIGNIN - Starting sign in');
+      console.log('🔐 SIGNIN - Handle:', handle);
+      console.log('🔐 SIGNIN - communityAuth.currentUser (before):', communityAuth.currentUser?.uid || null);
       await signInWithEmailAndPassword(communityAuth, formState.email, formState.password);
+      console.log('✅ SIGNIN - communityAuth.currentUser (after):', communityAuth.currentUser?.uid || null);
       toast({ title: "Signed In", description: "Welcome back!" });
       setDialogState({ ...dialogState, isSignInOpen: false });
       resetForm();

@@ -311,8 +311,7 @@ Looking forward to seeing you there!`;
         <Button
           type="button"
           onClick={handleSend}
-          className="flex-1"
-          style={{ backgroundColor: '#843484' }}
+          className="flex-1 h-10 px-4 rounded-md text-sm font-medium bg-[#E8DFD1] text-[#5B4A3A] hover:bg-[#dccdb6] focus-visible:ring-2 focus-visible:ring-[#8A7255] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Send Invite
         </Button>
