@@ -307,7 +307,6 @@ export default function PublicCommunityPage() {
       console.log('ℹ️ JOIN - Skipping memberCount update (should be done server-side)');
       
       setIsMember(true);
-      alert('Successfully joined the community!');
     } catch (error) {
       console.error('❌ Error joining community:', error);
       alert('Failed to join community. Please try again.');
