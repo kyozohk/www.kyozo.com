@@ -501,13 +501,15 @@ function WillerLandingContent() {
               <h2
                 className="font-bold text-2xl md:text-5xl leading-[32px] md:leading-[58px] tracking-[-0.5px] md:tracking-[-1px] mb-2 md:mb-3 bg-clip-text"
                 style={{
-                  backgroundImage: "linear-gradient(59.5982deg, rgb(89, 96, 134) 3.1066%, rgb(123, 131, 175) 97.105%)",
+                  /* Updated to lighter, softer lavender/periwinkle RGB values */
+                  backgroundImage: "linear-gradient(59.5982deg, rgb(156, 165, 198) 3.1066%, rgb(186, 193, 224) 97.105%)",
                   WebkitTextFillColor: "transparent",
                 }}
               >
                 Welcome to the Willer Universe
               </h2>
-              <p className="text-sm md:text-2xl text-[#4d5f71] font-normal leading-[22px] md:leading-normal">
+              {/* Updated text-[#4d5f71] to text-[#94a3b8] */}
+              <p className="text-sm md:text-2xl text-[#94a3b8] font-normal leading-[22px] md:leading-normal">
                 A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.
               </p>
             </div>
@@ -522,7 +524,7 @@ function WillerLandingContent() {
 
           {/* Compact Join CTA */}
           {!user && (
-            <section className="bg-gradient-to-br from-[#5c7ea0] to-[#446c91] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
+            <section className="bg-gradient-to-br from-[#8abfd6] to-[#6da4be] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
               <div className="flex-1 w-full">
                 <p className="text-[13px] md:text-[16px] text-[#f5f1e8] leading-5 md:leading-6 tracking-[-0.1px] md:tracking-[-0.2px]">
                   <span className="font-bold text-[#ffdea8]">I&apos;d love you to join the community</span> to view full content, updates and insights. Please join or sign in.

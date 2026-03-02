@@ -56,7 +56,7 @@ export function PageSkeleton() {
           </section>
 
           {/* Join Community Banner */}
-          <section className="bg-gradient-to-br from-[#5c7ea0] to-[#446c91] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
+          <section className="bg-gradient-to-br from-[#8abfd6] to-[#6da4be] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
             <div className="flex-1 w-full">
               <Skeleton className="h-4 w-full md:h-5 md:w-3/4 rounded-md" />
             </div>
