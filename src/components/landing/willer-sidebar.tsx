@@ -101,9 +101,9 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage }: Will
 
           {/* Feed Link */}
           <Link
-            href="/feed"
+            href="/"
             className={`flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors ${
-              pathname === "/feed" ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
+              pathname === "/" ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
             }`}
           >
             <div className="rotate-180">
@@ -158,7 +158,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage }: Will
           </button>
 
           {/* Explore Button */}
-          <Link
+          {/* <Link
             href="/explore"
             className={`flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors ${
               pathname === "/explore" ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
@@ -175,7 +175,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage }: Will
               </svg>
             </div>
             <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Explore</p>
-          </Link>
+          </Link> */}
         </div>
       </div>
 

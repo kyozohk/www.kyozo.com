@@ -42,4 +42,10 @@ next-env.d.ts
 
 # firebase
 firebase-debug.log
-firestore-debug.logv2/
+firestore-debug.log
+
+# v2 project
+v2/node_modules/
+v2/dist/
+v2/.vite/
+v2/index.html
