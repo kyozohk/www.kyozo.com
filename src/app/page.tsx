@@ -14,6 +14,9 @@ import { PostDetailPanel } from '@/components/community/feed/post-detail-panel';
 import { WillerSidebar } from '@/components/landing/willer-sidebar';
 import { WillerFilterTabs } from '@/components/landing/willer-filter-tabs';
 import { PageSkeleton } from '@/components/community/feed/page-skeleton';
+import { ReadCard } from '@/components/content-cards/read-card';
+import { ListenCard } from '@/components/content-cards/listen-card';
+import { WatchCard } from '@/components/content-cards/watch-card';
 
 type FilterType = "All" | "Read" | "Listen" | "Watch";
 
@@ -168,7 +171,7 @@ function WillerLandingContent() {
 
   // Render a Text card (exact v2 structure)
   const renderTextCard = (post: Post & { id: string }) => (
-    <div key={post.id} className="flex-1 cursor-pointer" onClick={() => setSelectedPost(post)}>
+    <div key={post.id} className="flex-1">
       <article className="bg-[#f5f1e8] rounded-[20px] p-6 hover:shadow-lg transition-shadow h-full">
         <div className="flex gap-2 items-center mb-4">
           <span className="bg-[#926b7f] text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide">
@@ -196,7 +199,7 @@ function WillerLandingContent() {
   const renderImageCard = (post: Post & { id: string }) => {
     const imageUrl = post.content?.mediaUrls?.[0] || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&h=600&fit=crop';
     return (
-      <div key={post.id} className="flex-1 cursor-pointer" onClick={() => setSelectedPost(post)}>
+      <div key={post.id} className="flex-1">
         <article className="relative rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group h-full">
           <img alt="" className="absolute inset-0 w-full h-full object-cover" src={imageUrl} />
           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
@@ -226,7 +229,7 @@ function WillerLandingContent() {
 
   // Render an Audio card (exact v2 structure)
   const renderAudioCard = (post: Post & { id: string }) => (
-    <div key={post.id} className="flex-1 cursor-pointer" onClick={() => setSelectedPost(post)}>
+    <div key={post.id} className="flex-1">
       <article className="bg-[#f5f1e8] rounded-[20px] p-6 hover:shadow-lg transition-shadow h-full">
         <div className="flex gap-2 items-center mb-4">
           <span className="bg-[#6e94b1] text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide">
@@ -264,7 +267,7 @@ function WillerLandingContent() {
   const renderVideoCard = (post: Post & { id: string }) => {
     const imageUrl = post.content?.mediaUrls?.[0] || post.content?.thumbnailUrl || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&h=600&fit=crop';
     return (
-      <div key={post.id} className="flex-1 cursor-pointer" onClick={() => setSelectedPost(post)}>
+      <div key={post.id} className="flex-1">
         <article className="relative rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group h-full">
           <img alt="" className="absolute inset-0 w-full h-full object-cover" src={imageUrl} />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
@@ -309,10 +312,45 @@ function WillerLandingContent() {
   // Render a single post card based on type
   const renderCard = (post: Post & { id: string }) => {
     switch (post.type) {
-      case 'audio': return renderAudioCard(post);
-      case 'video': return renderVideoCard(post);
-      case 'image': return renderImageCard(post);
-      default: return renderTextCard(post);
+      case 'audio':
+        return (
+          <ListenCard
+            key={post.id}
+            post={post}
+            category="Audio"
+            episode="Listen"
+            duration="3:07"
+            title={post.title || 'Untitled'}
+            summary={post.content?.text || ''}
+            isPrivate={post.visibility === 'private'}
+          />
+        );
+      case 'video':
+        return (
+          <WatchCard
+            key={post.id}
+            post={post}
+            category="Video"
+            title={post.title || 'Untitled'}
+            imageUrl={post.content?.mediaUrls?.[0] || ''}
+            imageHint=""
+            isPrivate={post.visibility === 'private'}
+          />
+        );
+      case 'text':
+      default:
+        return (
+          <ReadCard
+            key={post.id}
+            post={post}
+            category="Text"
+            readTime={getReadTime(post)}
+            date={getPostDate(post)}
+            title={post.title || 'Untitled'}
+            summary={post.content?.text || ''}
+            isPrivate={post.visibility === 'private'}
+          />
+        );
     }
   };
 
@@ -551,7 +589,11 @@ function WillerLandingContent() {
           <div className="flex flex-col gap-4 md:gap-6">
             {postRows.map((row, rowIndex) => (
               <div key={rowIndex} className="flex flex-col md:flex-row gap-6">
-                {row.map((post) => renderCard(post))}
+                {row.map((post) => (
+                  <div key={post.id} className="flex-1 min-h-[400px]">
+                    {renderCard(post)}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
