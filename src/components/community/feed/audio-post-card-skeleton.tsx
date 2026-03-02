@@ -11,33 +11,20 @@ export function AudioPostCardSkeleton() {
   };
 
   return (
-    <div className="bg-white overflow-hidden shadow-md border border-neutral-200 rounded-3xl" style={cardStyle}>
-      <div className="p-4 md:p-6 lg:p-8 h-full flex flex-col justify-between" style={innerDivStyle}>
-        <div className="flex flex-col gap-3 md:gap-4 lg:gap-6">
-          <div className="flex flex-col gap-2 md:gap-3 lg:gap-5">
-            <div className="flex items-center gap-2 md:gap-2.5">
-              <Skeleton className="h-6 w-16 rounded-full" />
-              <Skeleton className="h-4 w-24 rounded-full" />
-            </div>
-            <Skeleton className="h-8 w-3/4 rounded-md" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full rounded-md" />
-              <Skeleton className="h-4 w-[90%] rounded-md" />
-            </div>
-          </div>
-          <div className="space-y-3 md:space-y-4">
-            <div className="flex items-center gap-3 md:gap-4">
-              <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
-              <div className="flex-1">
-                <div className="flex items-center gap-[2px] h-16 md:h-20 lg:h-24">
-                  {[...Array(60)].map((_, i) => {
-                    const height = ((i * 7 + 13) % 60) + 20;
-                    return <Skeleton key={i} className="flex-1 rounded-full" style={{ height: `${height}%` }} />;
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="bg-[#f5f1e8] rounded-[20px] p-6 hover:shadow-lg transition-shadow h-full">
+      <div className="flex gap-2 items-center mb-4">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-4 w-24 rounded-full" />
+      </div>
+      <Skeleton className="h-10 w-3/4 mb-4 rounded-md" />
+      <Skeleton className="h-4 w-full mb-6 rounded-md truncate" />
+      <div className="flex gap-3.5 items-center">
+        <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
+        <div className="flex-1 flex gap-1 items-center justify-between h-[60px]">
+          {[...Array(60)].map((_, i) => {
+            const height = ((i * 7 + 13) % 60) + 20;
+            return <Skeleton key={i} className="bg-[#ccc] w-[3.253px] rounded-full" style={{ height: `${height}px` }} />;
+          })}
         </div>
       </div>
     </div>

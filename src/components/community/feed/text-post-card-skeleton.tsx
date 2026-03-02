@@ -11,26 +11,19 @@ export function TextPostCardSkeleton({ hasImage = true }: { hasImage?: boolean }
   };
 
   return (
-    <div className="bg-white overflow-hidden shadow-md border border-neutral-200 rounded-3xl" style={cardStyle}>
-      <div className="p-4 md:p-6 lg:p-8 flex flex-col justify-between" style={innerDivStyle}>
-        <div className="flex flex-col gap-3 md:gap-4 lg:gap-6">
-          <div className="flex flex-col gap-2 md:gap-3 lg:gap-5">
-            <div className="flex items-center gap-2 md:gap-2.5">
-              <Skeleton className="h-6 w-16 rounded-full" />
-              <Skeleton className="h-4 w-24 rounded-full" />
-            </div>
-            <Skeleton className="h-8 w-3/4 mb-2 rounded-md" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full rounded-md" />
-            <Skeleton className="h-4 w-[90%] rounded-md" />
-          </div>
-        </div>
-        <div className="pt-4 md:pt-5 lg:pt-7 flex-shrink-0">
-          <div className="flex items-center justify-end">
-            <Skeleton className="h-4 w-32 rounded-md" />
-          </div>
-        </div>
+    <div className="bg-[#f5f1e8] rounded-[20px] p-6 hover:shadow-lg transition-shadow h-full">
+      <div className="flex gap-2 items-center mb-4">
+        <Skeleton className="h-6 w-16 rounded-full" />
+        <Skeleton className="h-4 w-24 rounded-full" />
+      </div>
+      <Skeleton className="h-10 w-3/4 mb-4 rounded-md" />
+      <div className="space-y-2 mb-4">
+        <Skeleton className="h-4 w-full rounded-md" />
+        <Skeleton className="h-4 w-[90%] rounded-md" />
+        <Skeleton className="h-4 w-[80%] rounded-md" />
+      </div>
+      <div className="flex justify-end">
+        <Skeleton className="h-4 w-32 rounded-md" />
       </div>
     </div>
   );

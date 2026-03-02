@@ -8,26 +8,23 @@ export function VideoPostCardSkeleton() {
   };
   
   return (
-    <div className="relative bg-neutral-900 overflow-hidden shadow-md border border-neutral-200 min-h-[400px] rounded-3xl" style={cardStyle}>
+    <div className="relative rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group h-full">
       <Skeleton className="absolute inset-0 w-full h-full" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-      
-      <div className="relative z-10 p-4 md:p-6 flex flex-col justify-between h-full min-h-[400px]">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-6 w-16 rounded-full" />
-        </div>
-        
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+      <div className="relative p-6 flex flex-col justify-between h-full min-h-[400px]">
         <div>
-          <Skeleton className="h-8 w-3/4 mb-4" />
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-                <Skeleton className="h-8 w-16 rounded-md" />
-                <Skeleton className="h-8 w-16 rounded-md" />
-                <Skeleton className="h-8 w-16 rounded-md" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-10 w-10 rounded-full" />
-            </div>
+          <div className="flex gap-2 items-center mb-4">
+            <Skeleton className="h-6 w-16 rounded-full" />
+            <Skeleton className="h-4 w-24 rounded-full" />
+          </div>
+          <Skeleton className="h-10 w-3/4 mb-4 rounded-md" />
+          <Skeleton className="h-4 w-full rounded-md" />
+        </div>
+        <div className="flex gap-4 items-center w-full max-w-[485px]">
+          <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
+          <div className="flex-1 flex flex-col gap-1.5 justify-center">
+            <Skeleton className="h-4 w-20 rounded-md" />
+            <Skeleton className="h-2 w-full rounded-full" />
           </div>
         </div>
       </div>

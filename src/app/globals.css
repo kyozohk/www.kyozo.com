@@ -182,3 +182,15 @@ body {
     background: #F2EDE8;
   }
 }
+
+/* Disable overscroll/pull-down effect to prevent black background */
+html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure background covers full viewport */
+body {
+  min-height: 100vh;
+  background-color: #bfbebd;
+}
