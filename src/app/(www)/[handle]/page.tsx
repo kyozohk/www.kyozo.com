@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '@/firebase/firestore';
@@ -12,9 +12,13 @@ import { FirestorePermissionError } from '@/firebase/errors';
 import { WillerSidebar } from '@/components/landing/willer-sidebar';
 import { WillerFilterTabs } from '@/components/landing/willer-filter-tabs';
 import { PageSkeleton } from '@/components/community/feed/page-skeleton';
+import { FeedSkeletons } from '@/components/community/feed/skeletons';
 import { ReadCard } from '@/components/content-cards/read-card';
 import { ListenCard } from '@/components/content-cards/listen-card';
 import { WatchCard } from '@/components/content-cards/watch-card';
+import { SignupDialog } from '@/components/community/signup-dialog';
+import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
+import { useAuthAndDialog } from '@/hooks/use-auth-and-dialog';
 
 type FilterType = "All" | "Read" | "Listen" | "Watch";
 
@@ -138,7 +142,11 @@ function PostList({ filter }: { filter: string }) {
   };
   
   if (loading) {
-    return <PageSkeleton />;
+    return (
+      <div className="flex flex-col gap-4 md:gap-6">
+        <FeedSkeletons />
+      </div>
+    );
   }
 
   const filteredPosts = posts.filter((post) => shouldShowPost(post.type));
@@ -168,8 +176,18 @@ export default function PublicCommunityPage() {
   const { user, loading: authLoading } = useCommunityAuth();
   const [communityData, setCommunityData] = useState<Community | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
-  const [showSignInModal, setShowSignInModal] = useState(false);
-  const [showJoinCommunityModal, setShowJoinCommunityModal] = useState(false);
+  
+  const {
+    dialogState,
+    setDialogState,
+    formState,
+    handleFormChange,
+    handleCheckboxChange,
+    handleSignUp,
+    handleSignIn,
+    handleSignInWithGoogle,
+    handleToggleMode
+  } = useAuthAndDialog();
 
 
   useEffect(() => {
@@ -190,8 +208,9 @@ export default function PublicCommunityPage() {
       {/* Sidebar */}
       <WillerSidebar
         profileImage={communityData?.communityProfileImage || imgEllipse1}
-        onSignInClick={() => setShowSignInModal(true)}
-        onJoinClick={() => setShowJoinCommunityModal(true)}
+        handle={handle}
+        onSignInClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
+        onJoinClick={() => setDialogState({ ...dialogState, isSignUpOpen: true, isSignInOpen: false })}
       />
 
       {/* Main Content */}
@@ -250,13 +269,13 @@ export default function PublicCommunityPage() {
               </div>
               <div className="flex items-center gap-0 flex-shrink-0">
                 <button
-                  onClick={() => setShowJoinCommunityModal(true)}
+                  onClick={() => setDialogState({ ...dialogState, isSignUpOpen: true, isSignInOpen: false })}
                   className="bg-[#62b7c8] border-2 border-[#40b8d0] px-3 md:px-4 py-1.5 md:py-2 rounded-l-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#53a3b4] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
                 >
                   Join
                 </button>
                 <button
-                  onClick={() => setShowSignInModal(true)}
+                  onClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
                   className="bg-[#5293a1] border-2 border-[#40b8d0] border-l-0 px-3 md:px-4 py-1.5 md:py-2 rounded-r-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#467f8d] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
                 >
                   Sign in
@@ -265,10 +284,42 @@ export default function PublicCommunityPage() {
             </section>
           )}
 
-            <PostList filter={activeFilter.toLowerCase()} />
+            <Suspense fallback={<FeedSkeletons />}>
+              <PostList filter={activeFilter.toLowerCase()} />
+            </Suspense>
           </div>
         </main>
       </div>
+
+      {/* Sign In / Sign Up Dialog */}
+      <SignupDialog
+        isOpen={dialogState.isSignUpOpen || dialogState.isSignInOpen}
+        onClose={() => setDialogState({ ...dialogState, isSignUpOpen: false, isSignInOpen: false })}
+        isSignup={dialogState.isSignUpOpen}
+        communityName={communityData?.name}
+        firstName={formState.firstName}
+        lastName={formState.lastName}
+        email={formState.email}
+        phone={formState.phone}
+        password={formState.password}
+        agreedToPrivacy={formState.agreedToPrivacy}
+        error={formState.error}
+        onFirstNameChange={(value) => handleFormChange('firstName', value)}
+        onLastNameChange={(value) => handleFormChange('lastName', value)}
+        onEmailChange={(value) => handleFormChange('email', value)}
+        onPhoneChange={(value) => handleFormChange('phone', value)}
+        onPasswordChange={(value) => handleFormChange('password', value)}
+        onAgreedToPrivacyChange={(value) => handleCheckboxChange('agreedToPrivacy', value)}
+        onSubmit={dialogState.isSignUpOpen ? handleSignUp : handleSignIn}
+        onGoogleSignIn={handleSignInWithGoogle}
+        onToggleMode={handleToggleMode}
+        onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
+      />
+      
+      <PrivacyPolicyDialog
+        open={dialogState.showPrivacyPolicy}
+        onOpenChange={(open) => setDialogState({ ...dialogState, showPrivacyPolicy: open })}
+      />
     </div>
   );
 }
