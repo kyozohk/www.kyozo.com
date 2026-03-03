@@ -65,6 +65,7 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
   const [resending, setResending] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const hasPrefilled = useRef(false);
 
   // Reset when dialog closes
   useEffect(() => {
@@ -74,18 +75,20 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
       setVerificationError(null);
       setConfirmPassword('');
       setPasswordError('');
+      hasPrefilled.current = false;
     }
   }, [isOpen]);
 
-  // Pre-fill form data when dialog opens with invite data
+  // Pre-fill form data when dialog opens with invite data (only once)
   useEffect(() => {
-    if (isOpen && prefillData) {
+    if (isOpen && prefillData && !hasPrefilled.current) {
       if (prefillData.firstName) onFirstNameChange(prefillData.firstName);
       if (prefillData.lastName) onLastNameChange(prefillData.lastName);
       if (prefillData.email) onEmailChange(prefillData.email);
-      setIsSignUp(true); // Force sign-up mode for invites
+      setIsSignUp(true);
+      hasPrefilled.current = true;
     }
-  }, [isOpen, prefillData]);
+  }, [isOpen, prefillData, onFirstNameChange, onLastNameChange, onEmailChange]);
 
   // Focus first input when verification step opens
   useEffect(() => {
