@@ -1,30 +1,24 @@
+"use client";
 
-'use client';
-
-import { useState, useEffect, Suspense, useCallback } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import { collection, query, where, onSnapshot, orderBy, doc, getDoc, setDoc, updateDoc, serverTimestamp, increment } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '@/firebase/firestore';
 import { getCommunityByHandle } from '@/lib/community-utils';
 import { type Post, type Community } from '@/lib/types';
-import { ReadCard } from '@/components/content-cards/read-card';
-import { ImageCard } from '@/components/content-cards/image-card';
-import { ListenCard } from '@/components/content-cards/listen-card';
-import { ListenCardHorizontal } from '@/components/content-cards/listen-card-horizontal';
-import { WatchCard } from '@/components/content-cards/watch-card';
-import { FeedSkeletons } from '@/components/community/feed/skeletons';
-import Link from 'next/link';
-import '@/components/content-cards/content-cards.css';
+import { useCommunityAuth } from '@/hooks/use-community-auth';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
-import { useCommunityAuth } from '@/hooks/use-community-auth';
-import { Button } from '@/components/ui/button';
-import { UserMenu } from '@/components/layout/user-menu';
-import { useAuthAndDialog } from '@/hooks/use-auth-and-dialog';
-import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
-import { SignupDialog } from '@/components/community/signup-dialog';
-import { PostDetailPanel } from '@/components/community/feed/post-detail-panel';
-import { ChevronDown, LogOut } from 'lucide-react';
+import { WillerSidebar } from '@/components/landing/willer-sidebar';
+import { WillerFilterTabs } from '@/components/landing/willer-filter-tabs';
+import { PageSkeleton } from '@/components/community/feed/page-skeleton';
+import { ReadCard } from '@/components/content-cards/read-card';
+import { ListenCard } from '@/components/content-cards/listen-card';
+import { WatchCard } from '@/components/content-cards/watch-card';
+
+type FilterType = "All" | "Read" | "Listen" | "Watch";
+
+const imgEllipse1 = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop";
 
 function PostList({ filter }: { filter: string }) {
   const params = useParams();
@@ -44,19 +38,19 @@ function PostList({ filter }: { filter: string }) {
     let postsQuery;
 
     if (user) {
-        postsQuery = query(
-            postsRef,
-            where('communityHandle', '==', handle),
-            where('visibility', 'in', ['public', 'private']),
-            orderBy('createdAt', 'desc')
-        );
+      postsQuery = query(
+        postsRef,
+        where('communityHandle', '==', handle),
+        where('visibility', 'in', ['public', 'private']),
+        orderBy('createdAt', 'desc')
+      );
     } else {
-        postsQuery = query(
-            postsRef,
-            where('communityHandle', '==', handle),
-            where('visibility', '==', 'public'),
-            orderBy('createdAt', 'desc')
-        );
+      postsQuery = query(
+        postsRef,
+        where('communityHandle', '==', handle),
+        where('visibility', '==', 'public'),
+        orderBy('createdAt', 'desc')
+      );
     }
 
     const unsubscribe = onSnapshot(postsQuery, (snapshot) => {
@@ -64,8 +58,6 @@ function PostList({ filter }: { filter: string }) {
         id: doc.id,
         ...doc.data()
       })) as (Post & { id: string })[];
-      
-      console.log('🌍 PUBLIC FEED - Posts loaded:', postsData.length);
       
       setPosts(postsData);
       setLoading(false);
@@ -81,159 +73,104 @@ function PostList({ filter }: { filter: string }) {
     return () => unsubscribe();
   }, [handle, user, authLoading]);
   
-  const renderPost = (post: Post & { id: string }) => {
-    return (
-      <div key={post.id} onClick={() => setSelectedPost(post)} className={`break-inside-avoid mb-6 cursor-pointer`}>
-        {post.type === 'audio' ? (
+  const getReadTime = (post: Post) => {
+    const textLength = post.content?.text?.length || 0;
+    return `${Math.max(1, Math.ceil(textLength / 1000))} min read`;
+  };
+
+  const getPostDate = (post: Post) => {
+    if (post.createdAt?.toDate) {
+      return post.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
+    }
+    return '2026';
+  };
+
+  const shouldShowPost = (type: string) => {
+    if (filter === "all") return true;
+    if (filter === "read" && (type === "text" || type === "image")) return true;
+    if (filter === "listen" && type === "audio") return true;
+    if (filter === "watch" && type === "video") return true;
+    return false;
+  };
+
+  const renderCard = (post: Post & { id: string }) => {
+    switch (post.type) {
+      case 'audio':
+        return (
           <ListenCard
-            post={{ ...post, _isPublicView: true }}
+            key={post.id}
+            post={post}
             category="Audio"
             episode="Listen"
-            duration="0:00"
-            title={post.title || 'Untitled Audio'}
-            summary={post.content.text}
+            duration="3:07"
+            title={post.title || 'Untitled'}
+            summary={post.content?.text || ''}
+            isPrivate={post.visibility === 'private'}
           />
-        ) : post.type === 'video' ? (
+        );
+      case 'video':
+        return (
           <WatchCard
-            post={{ ...post, _isPublicView: true }}
+            key={post.id}
+            post={post}
             category="Video"
-            title={post.title || 'Untitled Video'}
-            imageUrl={post.content.mediaUrls?.[0] || 'https://picsum.photos/seed/video-placeholder/800/600'}
-            imageHint="video content"
-          />
-        ) : post.type === 'image' ? (
-          <ImageCard
-            post={{ ...post, _isPublicView: true }}
-            category="Image"
-            readTime={`${Math.max(1, Math.ceil((post.content.text?.length || 0) / 1000))} min read`}
-            date={post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Dec 2024'}
             title={post.title || 'Untitled'}
-            summary={post.content.text}
-            imageUrl={post.content.mediaUrls?.[0] || 'https://picsum.photos/seed/image-placeholder/800/600'}
+            imageUrl={post.content?.mediaUrls?.[0] || ''}
+            imageHint=""
+            isPrivate={post.visibility === 'private'}
           />
-        ) : (
+        );
+      case 'text':
+      default:
+        return (
           <ReadCard
-            post={{ ...post, _isPublicView: true }}
+            key={post.id}
+            post={post}
             category="Text"
-            readTime={`${Math.max(1, Math.ceil((post.content.text?.length || 0) / 1000))} min read`}
-            date={post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Dec 2024'}
+            readTime={getReadTime(post)}
+            date={getPostDate(post)}
             title={post.title || 'Untitled'}
-            summary={post.content.text}
+            summary={post.content?.text || ''}
+            isPrivate={post.visibility === 'private'}
           />
-        )}
-      </div>
-    );
+        );
+    }
   };
   
   if (loading) {
-    return (
-      <div className="masonry-feed-columns">
-        <FeedSkeletons />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
-  const filteredPosts = posts.filter((post) => {
-    if (filter === 'all') return true;
-    if (filter === 'read') return post.type === 'text' || post.type === 'image';
-    if (filter === 'listen') return post.type === 'audio';
-    if (filter === 'watch') return post.type === 'video';
-    return true;
-  });
-
-  // Get first audio post for top placement, rest stay in feed
-  const firstAudioPost = filteredPosts.find(post => post.type === 'audio');
-  const feedPosts = firstAudioPost 
-    ? filteredPosts.filter(post => post.id !== firstAudioPost.id)
-    : filteredPosts;
+  const filteredPosts = posts.filter((post) => shouldShowPost(post.type));
+  const postRows: (Post & { id: string })[][] = [];
+  for (let i = 0; i < filteredPosts.length; i += 2) {
+    postRows.push(filteredPosts.slice(i, i + 2));
+  }
 
   return (
-    <>
-      {/* First audio post - full width at top */}
-      {firstAudioPost && (
-        <div className="mb-8">
-          <div onClick={() => setSelectedPost(firstAudioPost)} className="cursor-pointer">
-            <ListenCardHorizontal
-              post={{ ...firstAudioPost, _isPublicView: true }}
-              category="Audio"
-              episode="Listen"
-              duration="0:00"
-              title={firstAudioPost.title || 'Untitled Audio'}
-              summary={firstAudioPost.content.text}
-            />
-          </div>
+    <div className="flex flex-col gap-4 md:gap-6">
+      {postRows.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex flex-col md:flex-row gap-6">
+          {row.map((post) => (
+            <div key={post.id} className="flex-1 min-h-[400px]">
+              {renderCard(post)}
+            </div>
+          ))}
         </div>
-      )}
-      
-      {/* All other posts - masonry grid */}
-      <div className="masonry-feed-columns">
-        {feedPosts.map(renderPost)}
-      </div>
-      
-      <PostDetailPanel
-        post={selectedPost}
-        isOpen={!!selectedPost}
-        onClose={() => setSelectedPost(null)}
-      />
-    </>
+      ))}
+    </div>
   );
 }
 
 export default function PublicCommunityPage() {
   const params = useParams();
-  const searchParams = useSearchParams();
   const handle = params.handle as string;
-  const { 
-    user, 
-    loading: authLoading, 
-    dialogState,
-    setDialogState,
-    formState,
-    handleFormChange,
-    handleCheckboxChange,
-    handleSignUp,
-    handleSignIn,
-    handleSignInWithGoogle,
-    handleSignOut,
-    handleToggleMode
-  } = useAuthAndDialog();
-
+  const { user, loading: authLoading } = useCommunityAuth();
   const [communityData, setCommunityData] = useState<Community | null>(null);
-  const [isMember, setIsMember] = useState<boolean>(false);
-  const [checkingMembership, setCheckingMembership] = useState<boolean>(true);
-  const [joiningCommunity, setJoiningCommunity] = useState<boolean>(false);
-  const [filter, setFilter] = useState<string>('all');
+  const [activeFilter, setActiveFilter] = useState<FilterType>("All");
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showJoinCommunityModal, setShowJoinCommunityModal] = useState(false);
 
-  const openSignInDialog = () => setDialogState({ ...dialogState, isSignInOpen: true });
-
-  const openSignUpDialog = useCallback(() => {
-    setDialogState({ isSignInOpen: false, isSignUpOpen: true, isResetPasswordOpen: false, showPrivacyPolicy: false });
-  }, [setDialogState]);
-  
-  useEffect(() => {
-    if (searchParams.get('signup') === 'true') {
-      openSignUpDialog();
-    }
-  }, [searchParams, openSignUpDialog]);
-
-  useEffect(() => {
-    const firstName = searchParams.get('firstName');
-    const lastName = searchParams.get('lastName');
-    const email = searchParams.get('email');
-    
-    if (dialogState.isSignUpOpen && (firstName || lastName || email)) {
-      if (firstName && formState.firstName !== firstName) {
-        handleFormChange('firstName', firstName);
-      }
-      if (lastName && formState.lastName !== lastName) {
-        handleFormChange('lastName', lastName);
-      }
-      if (email && formState.email !== email) {
-        handleFormChange('email', email);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dialogState.isSignUpOpen, searchParams]);
 
   useEffect(() => {
     async function fetchCommunityData() {
@@ -243,219 +180,95 @@ export default function PublicCommunityPage() {
     }
     fetchCommunityData();
   }, [handle]);
-
-  useEffect(() => {
-    async function checkMembership() {
-      if (!user || !communityData) {
-        setCheckingMembership(false);
-        setIsMember(false);
-        return;
-      }
-
-      setCheckingMembership(true);
-      try {
-        console.log('🔎 MEMBERSHIP - Starting check');
-        console.log('🔎 MEMBERSHIP - Handle:', handle);
-        console.log('🔎 MEMBERSHIP - User UID:', user.uid);
-        console.log('🔎 MEMBERSHIP - Community ID:', communityData.communityId);
-        const memberDocId = `${user.uid}_${communityData.communityId}`;
-        console.log('🔎 MEMBERSHIP - Member doc id:', memberDocId);
-        const memberRef = doc(db, 'communityMembers', memberDocId);
-        const memberSnap = await getDoc(memberRef);
-        
-        console.log('🔎 MEMBERSHIP - Member doc exists:', memberSnap.exists());
-        setIsMember(memberSnap.exists());
-      } catch (error) {
-        console.error('❌ Error checking membership:', error);
-        setIsMember(false);
-      }
-      setCheckingMembership(false);
-    }
-
-    checkMembership();
-  }, [user, communityData]);
-
-  const handleJoinCommunity = async () => {
-    if (!user || !communityData) return;
-
-    setJoiningCommunity(true);
-    try {
-      console.log('🏘️ JOIN - Starting join');
-      console.log('🏘️ JOIN - Handle:', handle);
-      console.log('🏘️ JOIN - User UID:', user.uid);
-      console.log('🏘️ JOIN - Community ID:', communityData.communityId);
-      const memberDocId = `${user.uid}_${communityData.communityId}`;
-      console.log('🏘️ JOIN - Member doc id:', memberDocId);
-      const memberRef = doc(db, 'communityMembers', memberDocId);
-      
-      const memberData = {
-        userId: user.uid,
-        communityId: communityData.communityId,
-        role: 'member',
-        joinedAt: serverTimestamp(),
-        userDetails: {
-          displayName: user.displayName || user.email,
-          email: user.email,
-          avatarUrl: user.photoURL || '',
-        }
-      };
-      
-      console.log('🏘️ JOIN - Writing member doc...');
-      await setDoc(memberRef, memberData);
-      console.log('✅ JOIN - Member doc written');
-      
-      console.log('ℹ️ JOIN - Skipping memberCount update (should be done server-side)');
-      
-      setIsMember(true);
-    } catch (error) {
-      console.error('❌ Error joining community:', error);
-      alert('Failed to join community. Please try again.');
-    }
-    setJoiningCommunity(false);
-  };
   
+  if (authLoading) {
+    return <PageSkeleton />;
+  }
+
   return (
-    <div className="min-h-screen bg-no-repeat bg-cover bg-center bg-fixed relative" style={{ backgroundImage: `url(/bg/public-feed-bg.jpg)` }}>
-      {/* 20% white overlay */}
-      <div className="absolute inset-0 bg-[#D9D9D9]/70"></div>
-      {/* Header */}
-      <div className="sticky top-0 z-50 backdrop-blur-sm relative">
-        <div className="w-full px-6 py-4 flex items-center justify-between">
-          {/* Left - Community Name with Dropdown */}
-          <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors group">
-            <span className="text-lg font-semibold uppercase tracking-wide">
-              {communityData?.name?.toUpperCase() || 'COMMUNITY'}
-            </span>
-            <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-gray-700" />
-          </button>
+    <div className="relative min-h-screen bg-[#bfbebd] flex">
+      {/* Sidebar */}
+      <WillerSidebar
+        profileImage={communityData?.communityProfileImage || imgEllipse1}
+        onSignInClick={() => setShowSignInModal(true)}
+        onJoinClick={() => setShowJoinCommunityModal(true)}
+      />
 
-          {/* Center - Filter Buttons */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                filter === 'all'
-                  ? 'bg-gray-700 text-white shadow-md '
-                  : 'bg-white/60 text-gray-700 hover:bg-white/80 '
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilter('read')}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                filter === 'read'
-                  ? 'bg-[#926B7F] text-white shadow-md'
-                  : 'bg-white/60 text-gray-600 hover:bg-white/80'
-              }`}
-            >
-              Read
-            </button>
-            <button
-              onClick={() => setFilter('listen')}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                filter === 'listen'
-                  ? 'bg-[#6E94B1] text-white shadow-md'
-                  : 'bg-white/60 text-gray-600 hover:bg-white/80'
-              }`}
-            >
-              Listen
-            </button>
-            <button
-              onClick={() => setFilter('watch')}
-              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                filter === 'watch'
-                  ? 'bg-[#F0C679] text-black shadow-md'
-                  : 'bg-white/60 text-gray-600 hover:bg-white/80'
-              }`}
-            >
-              Watch
-            </button>
-          </div>
-
-          {/* Right - User Menu */}
-          <div className="flex items-center gap-3">
-            {!authLoading && (
-              user ? (
-                <>
-                  {!checkingMembership && !isMember && (
-                    <button
-                      type="button"
-                      onClick={handleJoinCommunity}
-                      disabled={joiningCommunity}
-                      className="btn btn-primary"
-                    >
-                      {joiningCommunity ? 'Joining...' : 'Join'}
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={handleSignOut}
-                    className="btn btn-ghost"
-                    aria-label="Log out"
-                    title="Log out"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={openSignInDialog}
-                    className="btn btn-ghost"
-                  >
-                    Sign In here
-                  </button>
-                  <button
-                    type="button"
-                    onClick={openSignUpDialog}
-                    className="btn btn-primary"
-                  >
-                    Join Here
-                  </button>
-                </>
-              )
-            )}
-          </div>
+      {/* Main Content */}
+      <div className="flex-1 min-w-0">
+        {/* Background overlay */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute bg-[rgba(231,226,215,0.8)] inset-0 mix-blend-overlay" />
         </div>
-      </div>
 
-      {/* Content Area with proper spacing */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 pt-8 pb-12">
-        <Suspense fallback={<FeedSkeletons />}>
-          <PostList filter={filter} />
-        </Suspense>
-      </div>
+        {/* Header with Filter Tabs */}
+        <header className="sticky top-0 z-50 backdrop-blur-[2px] px-2 md:px-12 pt-[13px] pb-2 md:py-4">
+          <div className="max-w-[1632px] mx-auto flex items-center justify-center md:justify-between gap-3 md:gap-8 relative">
+            <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:flex-1 flex items-center justify-center" style={{ left: 'calc(30px + 50%)' }}>
+              <WillerFilterTabs activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+            </div>
+          </div>
+        </header>
 
-      <SignupDialog
-        isOpen={dialogState.isSignUpOpen || dialogState.isSignInOpen}
-        onClose={() => setDialogState({ ...dialogState, isSignUpOpen: false, isSignInOpen: false })}
-        isSignup={dialogState.isSignUpOpen}
-        communityName={communityData?.name}
-        firstName={formState.firstName}
-        lastName={formState.lastName}
-        email={formState.email}
-        phone={formState.phone}
-        password={formState.password}
-        agreedToPrivacy={formState.agreedToPrivacy}
-        error={formState.error}
-        onFirstNameChange={(value) => handleFormChange('firstName', value)}
-        onLastNameChange={(value) => handleFormChange('lastName', value)}
-        onEmailChange={(value) => handleFormChange('email', value)}
-        onPhoneChange={(value) => handleFormChange('phone', value)}
-        onPasswordChange={(value) => handleFormChange('password', value)}
-        onAgreedToPrivacyChange={(value) => handleCheckboxChange('agreedToPrivacy', value)}
-        onSubmit={dialogState.isSignUpOpen ? handleSignUp : handleSignIn}
-        onGoogleSignIn={handleSignInWithGoogle}
-        onToggleMode={handleToggleMode}
-        onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
-      />
-      
-      <PrivacyPolicyDialog
-        open={dialogState.showPrivacyPolicy}
-        onOpenChange={(open) => setDialogState({ ...dialogState, showPrivacyPolicy: open })}
-      />
+        {/* Main Feed Content */}
+        <main className="relative z-10 pb-8 md:pb-12">
+          <div className="max-w-[1090px] mx-auto px-3 md:px-6">
+          {/* Hero Section with Profile Picture */}
+          <section className="mb-4 md:mb-6 flex flex-col md:flex-row items-start justify-between gap-3 md:gap-6 pt-4 md:pt-6">
+            <div className="flex-1 w-full">
+              <h2
+                className="font-bold text-2xl md:text-5xl leading-[32px] md:leading-[58px] tracking-[-0.5px] md:tracking-[-1px] mb-2 md:mb-3 bg-clip-text"
+                style={{
+                  backgroundImage: "linear-gradient(59.5982deg, rgb(156, 165, 198) 3.1066%, rgb(186, 193, 224) 97.105%)",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Welcome to the {communityData?.name || 'Willer'} Universe
+              </h2>
+              <p className="text-sm md:text-2xl text-[#94a3b8] font-normal leading-[22px] md:leading-normal">
+                A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.
+              </p>
+            </div>
+            <div className="flex-shrink-0 hidden md:block">
+              {communityData?.communityProfileImage && (
+                <img
+                  src={communityData.communityProfileImage}
+                  alt={`${communityData.name}'s profile`}
+                  className="size-[100px] rounded-full object-cover shadow-lg border-4 border-[#e8dfd0]"
+                />
+              )}
+            </div>
+          </section>
+
+          {/* Compact Join CTA */}
+          {!user && (
+            <section className="bg-gradient-to-br from-[#8abfd6] to-[#6da4be] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
+              <div className="flex-1 w-full">
+                <p className="text-[13px] md:text-[16px] text-[#f5f1e8] leading-5 md:leading-6 tracking-[-0.1px] md:tracking-[-0.2px]">
+                  <span className="font-bold text-[#ffdea8]">I'd love you to join the community</span> to view full content, updates and insights. Please join or sign in.
+                </p>
+              </div>
+              <div className="flex items-center gap-0 flex-shrink-0">
+                <button
+                  onClick={() => setShowJoinCommunityModal(true)}
+                  className="bg-[#62b7c8] border-2 border-[#40b8d0] px-3 md:px-4 py-1.5 md:py-2 rounded-l-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#53a3b4] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
+                >
+                  Join
+                </button>
+                <button
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#5293a1] border-2 border-[#40b8d0] border-l-0 px-3 md:px-4 py-1.5 md:py-2 rounded-r-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#467f8d] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
+                >
+                  Sign in
+                </button>
+              </div>
+            </section>
+          )}
+
+            <PostList filter={activeFilter.toLowerCase()} />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

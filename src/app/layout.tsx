@@ -9,7 +9,7 @@ import { CommunityAuthProvider } from '@/hooks/use-community-auth';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'KyozoVerse',
+  title: 'Kyozo',
   description: 'The universe of communities.',
   icons: {
     icon: '/favicon.svg',

@@ -30,7 +30,7 @@ const WHATSAPP_NUMBER = process.env['360_NUMBER'] || '';
 const CALLBACK_URL = process.env['360_CALLBACK'] || '';
 
 // Safe configuration log: never print secret values, only whether they exist
-console.log('WhatsApp API Configuration (KyozoVerse):', {
+console.log('WhatsApp API Configuration (Kyozo):', {
   hasApiKey: !!API_KEY,
   apiKeySource: API_KEY_SOURCE,
   WEBHOOK_URL,
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Log which template and language we are about to send, for debugging 360 errors
-    console.log('WhatsApp template debug (KyozoVerse):', {
+    console.log('WhatsApp template debug (Kyozo):', {
       to: body.to,
       templateName: body.template.name,
       templateLanguage: body.template.language?.code || body.template.language,

@@ -43,7 +43,7 @@ export const InviteMemberDialog: React.FC<InviteMemberDialogProps> = ({
     
     const message = `Hi ${firstName || 'there'}! 
 
-You're invited to join ${community.name} on KyozoVerse! 
+You're invited to join ${community.name} on Kyozo! 
 
 ${community.lore || 'Join our community to access exclusive content and connect with other members.'}
 

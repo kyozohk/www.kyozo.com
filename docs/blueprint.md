@@ -1,4 +1,4 @@
-# **App Name**: KyozoVerse
+# **App Name**: Kyozo
 
 ## Core Features:
 

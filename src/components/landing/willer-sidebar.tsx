@@ -118,7 +118,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage }: Will
           </Link>
 
           {/* Community Link */}
-          <Link
+          {/* <Link
             href="/community"
             className={`flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors ${
               pathname === "/community" ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
@@ -132,7 +132,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage }: Will
               </svg>
             </div>
             <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Community</p>
-          </Link>
+          </Link> */}
 
         </div>
 

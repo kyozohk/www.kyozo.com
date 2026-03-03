@@ -124,7 +124,7 @@ export function RequestAccessDialog({ open, onOpenChange }: RequestAccessDialogP
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold mb-3 text-gray-900">Welcome to KyozoVerse! 🎉</h3>
+              <h3 className="text-2xl font-semibold mb-3 text-gray-900">Welcome to Kyozo! 🎉</h3>
               <p className="text-gray-600 mb-2">
                 We've sent a login link to:
               </p>

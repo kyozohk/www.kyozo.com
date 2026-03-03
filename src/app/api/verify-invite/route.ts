@@ -79,13 +79,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Get community information if available
-    let communityName = 'KyozoVerse';
+    let communityName = 'Kyozo';
     if (inviteData.communityId) {
       try {
         const communityDoc = await db.collection('communities').doc(inviteData.communityId).get();
         if (communityDoc.exists) {
           const communityData = communityDoc.data();
-          communityName = communityData?.name || 'KyozoVerse';
+          communityName = communityData?.name || 'Kyozo';
         }
       } catch (error) {
         console.error('Error fetching community data:', error);

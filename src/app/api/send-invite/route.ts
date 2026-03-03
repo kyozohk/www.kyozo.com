@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       // 1. Prepare admin notification email
       const adminEmailHtml = `
         <h1>New Access Request</h1>
-        <p>A new user has requested access to join KyozoVerse:</p>
+        <p>A new user has requested access to join Kyozo:</p>
         <ul>
           <li><strong>Name:</strong> ${firstName} ${lastName}</li>
           <li><strong>Email:</strong> ${email}</li>
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           to: process.env.ADMIN_EMAIL || 'admin@example.com', // In production, use a real admin email
-          subject: 'New KyozoVerse Access Request',
+          subject: 'New Kyozo Access Request',
           html: adminEmailHtml,
           from: 'notifications@onboard.kyozo.space',
         }),
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
       const adminEmailResult = await adminEmailResponse.json();
       console.log('\n==== ADMIN EMAIL SENT ====');
       console.log(`To: ${process.env.ADMIN_EMAIL || 'admin@example.com'}`);
-      console.log(`Subject: New KyozoVerse Access Request`);
+      console.log(`Subject: New Kyozo Access Request`);
       console.log(`Result:`, adminEmailResult);
       console.log('=========================\n');
       
@@ -277,7 +277,7 @@ export async function POST(request: Request) {
               <div class="greeting">Hi ${firstName}! 👋</div>
               
               <p class="text-block">
-                Thank you for joining the <strong>KyozoVerse</strong> waitlist! We're thrilled to have you as part of our creative community.
+                Thank you for joining the <strong>Kyozo</strong> waitlist! We're thrilled to have you as part of our creative community.
               </p>
               
               <p class="text-block">
@@ -299,7 +299,7 @@ export async function POST(request: Request) {
               <!-- Features -->
               <div class="features-list">
                 <p style="font-weight: 600; color: #2d3748; margin-bottom: 15px; font-size: 16px;">
-                  🌟 What you can do with KyozoVerse:
+                  🌟 What you can do with Kyozo:
                 </p>
                 <ul>
                   <li>Create and customize your unique community space</li>
@@ -316,14 +316,14 @@ export async function POST(request: Request) {
               
               <p class="text-block" style="margin-top: 30px;">
                 Best regards,<br>
-                <strong style="background: linear-gradient(90deg, #7c3aed, #4f46e5, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The KyozoVerse Team</strong>
+                <strong style="background: linear-gradient(90deg, #7c3aed, #4f46e5, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The Kyozo Team</strong>
               </p>
             </div>
             
             <!-- Footer -->
             <div class="footer">
               <img src="${logoUrl}" alt="Kyozo Logo" class="footer-logo" />
-              <p style="margin-bottom: 10px;">© ${new Date().getFullYear()} KyozoVerse. All rights reserved.</p>
+              <p style="margin-bottom: 10px;">© ${new Date().getFullYear()} Kyozo. All rights reserved.</p>
               <p style="font-size: 12px; color: #718096;">
                 Connecting the Cultural Industries
               </p>
@@ -346,7 +346,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           to: email,
-          subject: 'Welcome to KyozoVerse - Login & Setup Your Community',
+          subject: 'Welcome to Kyozo - Login & Setup Your Community',
           html: userEmailHtml,
           from: 'notifications@onboard.kyozo.space',
         }),
@@ -361,7 +361,7 @@ export async function POST(request: Request) {
       const userEmailResult = await userEmailResponse.json();
       console.log('\n==== USER EMAIL SENT ====');
       console.log(`To: ${email}`);
-      console.log(`Subject: Your KyozoVerse Access Request`);
+      console.log(`Subject: Your Kyozo Access Request`);
       console.log(`Result:`, userEmailResult);
       console.log('========================\n');
     } catch (emailError) {

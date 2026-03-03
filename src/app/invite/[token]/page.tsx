@@ -15,7 +15,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
       <div className="w-full max-w-2xl space-y-8 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
         <h1 className="text-center text-2xl font-bold text-gray-900">Complete Your Registration</h1>
         <p className="text-center text-gray-600">
-          Welcome to KyozoVerse! Please complete your registration to join our community.
+          Welcome to Kyozo! Please complete your registration to join our community.
         </p>
         
         <form className="space-y-6">
