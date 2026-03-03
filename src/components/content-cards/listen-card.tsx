@@ -10,6 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { deletePost } from '@/lib/post-utils';
 import { Waveform } from './waveform';
 import { cardTitleStyle, cardBodyStyle, CARD_TITLE_COLOR, CARD_BODY_COLOR } from './card-styles';
+import Link from 'next/link';
 
 interface ListenCardProps {
   category: string;
@@ -132,7 +133,8 @@ export function ListenCard({ category, episode, duration: initialDuration, title
 
   return (
     <>
-      <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl" style={cardStyle}>
+      <Link href={`/willer/${post.id}`} className="block h-full">
+        <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl h-full flex flex-col" style={cardStyle}>
         {isPrivate && (
           <div className="absolute top-4 right-4 z-10"><div className="bg-red-500 rounded-full p-2 shadow-lg"><Lock className="w-4 h-4 text-white" /></div></div>
         )}
@@ -182,6 +184,7 @@ export function ListenCard({ category, episode, duration: initialDuration, title
             onEnded={handleAudioEnded}
         />
       </div>
+      </Link>
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <AlertDialogContent>
               <AlertDialogHeader>

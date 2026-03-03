@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { deletePost } from '@/lib/post-utils';
 import { cardTitleStyle } from './card-styles';
+import Link from 'next/link';
 
 interface WatchCardProps {
   category: string;
@@ -200,7 +201,8 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
           />
         )}
         
-        <div className="relative bg-neutral-900 overflow-hidden shadow-md group cursor-pointer transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] min-h-[400px] rounded-3xl" style={cardStyle}>
+        <Link href={`/willer/${post.id}`} className="block h-full">
+        <div className="relative bg-neutral-900 overflow-hidden shadow-md group cursor-pointer transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] h-full rounded-3xl flex flex-col" style={cardStyle}>
         {/* Black overlay */}
         <div className="absolute inset-0 bg-black/50" />
         
@@ -269,6 +271,7 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
             </div>
         </div>
         </div>
+        </Link>
         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
             <AlertDialogContent>
                 <AlertDialogHeader>

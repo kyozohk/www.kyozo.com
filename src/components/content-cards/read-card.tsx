@@ -68,7 +68,8 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
 
   return (
     <>
-      <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl" style={cardStyle}>
+      <Link href={`/willer/${post.id}`} className="block h-full">
+        <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl h-full flex flex-col" style={cardStyle}>
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-20">
                 <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
@@ -121,7 +122,8 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </Link>
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <AlertDialogContent>
               <AlertDialogHeader>
