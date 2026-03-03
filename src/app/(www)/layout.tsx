@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { getFirebase } from '@/firebase';
 import { Toaster } from "@/components/ui/toaster";
-import { AuthAndDialogProvider } from '@/hooks/use-auth-and-dialog';
+import { AuthWithVerificationProvider } from '@/hooks/use-auth-with-verification';
 
 export default function PublicLayout({
   children,
@@ -15,7 +15,7 @@ export default function PublicLayout({
 
   return (
     <FirebaseClientProvider firebase={getFirebase()}>
-      <AuthAndDialogProvider>
+      <AuthWithVerificationProvider>
         <div 
           className="min-h-screen flex flex-col" 
         >
@@ -25,7 +25,7 @@ export default function PublicLayout({
           </main>       
         </div>
         <Toaster />
-      </AuthAndDialogProvider>
+      </AuthWithVerificationProvider>
     </FirebaseClientProvider>
   );
 }

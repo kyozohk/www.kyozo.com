@@ -99,7 +99,7 @@ export function PageSkeleton() {
                     <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
                     <div className="flex-1 flex gap-1 items-center justify-between h-[60px]">
                       {[...Array(60)].map((_, i) => (
-                        <Skeleton key={i} className="bg-[#ccc] w-[3.253px] rounded-full" style={{ height: `${Math.random() * 60 + 20}px` }} />
+                        <Skeleton key={i} className="bg-[#ccc] w-[3.253px] rounded-full" style={{ height: `${(i % 3) * 15 + 25}px` }} />
                       ))}
                     </div>
                   </div>
@@ -165,7 +165,7 @@ export function PageSkeleton() {
                     <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
                     <div className="flex-1 flex gap-1 items-center justify-between h-[60px]">
                       {[...Array(60)].map((_, i) => (
-                        <Skeleton key={i} className="bg-[#ccc] w-[3.253px] rounded-full" style={{ height: `${Math.random() * 60 + 20}px` }} />
+                        <Skeleton key={i} className="bg-[#ccc] w-[3.253px] rounded-full" style={{ height: `${(i % 3) * 15 + 25}px` }} />
                       ))}
                     </div>
                   </div>

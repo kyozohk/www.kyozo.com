@@ -16,9 +16,9 @@ import { FeedSkeletons } from '@/components/community/feed/skeletons';
 import { ReadCard } from '@/components/content-cards/read-card';
 import { ListenCard } from '@/components/content-cards/listen-card';
 import { WatchCard } from '@/components/content-cards/watch-card';
-import { SignupDialog } from '@/components/community/signup-dialog';
+import { UnifiedAuthDialog } from '@/components/community/unified-auth-dialog';
 import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
-import { useAuthAndDialog } from '@/hooks/use-auth-and-dialog';
+import { useAuthWithVerification } from '@/hooks/use-auth-with-verification';
 
 type FilterType = "All" | "Read" | "Listen" | "Watch";
 
@@ -186,8 +186,10 @@ export default function PublicCommunityPage() {
     handleSignUp,
     handleSignIn,
     handleSignInWithGoogle,
-    handleToggleMode
-  } = useAuthAndDialog();
+    handleToggleMode,
+    handleSendVerificationCode,
+    handleVerifyCode
+  } = useAuthWithVerification();
 
 
   useEffect(() => {
@@ -291,29 +293,27 @@ export default function PublicCommunityPage() {
         </main>
       </div>
 
-      {/* Sign In / Sign Up Dialog */}
-      <SignupDialog
+      {/* Unified Auth Dialog */}
+      <UnifiedAuthDialog
         isOpen={dialogState.isSignUpOpen || dialogState.isSignInOpen}
         onClose={() => setDialogState({ ...dialogState, isSignUpOpen: false, isSignInOpen: false })}
-        isSignup={dialogState.isSignUpOpen}
-        communityName={communityData?.name}
         firstName={formState.firstName}
         lastName={formState.lastName}
         email={formState.email}
-        phone={formState.phone}
         password={formState.password}
         agreedToPrivacy={formState.agreedToPrivacy}
         error={formState.error}
-        onFirstNameChange={(value) => handleFormChange('firstName', value)}
-        onLastNameChange={(value) => handleFormChange('lastName', value)}
-        onEmailChange={(value) => handleFormChange('email', value)}
-        onPhoneChange={(value) => handleFormChange('phone', value)}
-        onPasswordChange={(value) => handleFormChange('password', value)}
-        onAgreedToPrivacyChange={(value) => handleCheckboxChange('agreedToPrivacy', value)}
-        onSubmit={dialogState.isSignUpOpen ? handleSignUp : handleSignIn}
+        onFirstNameChange={(value: string) => handleFormChange('firstName', value)}
+        onLastNameChange={(value: string) => handleFormChange('lastName', value)}
+        onEmailChange={(value: string) => handleFormChange('email', value)}
+        onPasswordChange={(value: string) => handleFormChange('password', value)}
+        onAgreedToPrivacyChange={(value: boolean) => handleCheckboxChange('agreedToPrivacy', value)}
+        onSubmit={handleSignUp}
         onGoogleSignIn={handleSignInWithGoogle}
-        onToggleMode={handleToggleMode}
         onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
+        onSendVerificationCode={handleSendVerificationCode}
+        onVerifyCode={handleVerifyCode}
+        communityName={communityData?.name}
       />
       
       <PrivacyPolicyDialog

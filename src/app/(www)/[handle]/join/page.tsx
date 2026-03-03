@@ -7,8 +7,8 @@ import { db } from '@/firebase/firestore';
 import { getCommunityByHandle } from '@/lib/community-utils';
 import { type Community } from '@/lib/types';
 import { useCommunityAuth } from '@/hooks/use-community-auth';
-import { useAuthAndDialog } from '@/hooks/use-auth-and-dialog';
-import { SignupDialog } from '@/components/community/signup-dialog';
+import { useAuthWithVerification } from '@/hooks/use-auth-with-verification';
+import { UnifiedAuthDialog } from '@/components/community/unified-auth-dialog';
 import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
 import { PageSkeleton } from '@/components/community/feed/page-skeleton';
 
@@ -28,8 +28,10 @@ export default function JoinCommunityPage() {
     handleSignUp,
     handleSignIn,
     handleSignInWithGoogle,
-    handleToggleMode
-  } = useAuthAndDialog();
+    handleToggleMode,
+    handleSendVerificationCode,
+    handleVerifyCode
+  } = useAuthWithVerification();
 
   const [communityData, setCommunityData] = useState<Community | null>(null);
   const [isJoining, setIsJoining] = useState(false);
@@ -173,31 +175,34 @@ export default function JoinCommunityPage() {
         </button>
       </div>
 
-      <SignupDialog
+      <UnifiedAuthDialog
         isOpen={dialogState.isSignUpOpen || dialogState.isSignInOpen}
         onClose={() => {
           setDialogState({ ...dialogState, isSignUpOpen: false, isSignInOpen: false });
           router.push(`/${handle}`);
         }}
-        isSignup={dialogState.isSignUpOpen}
-        communityName={communityData?.name}
         firstName={formState.firstName}
         lastName={formState.lastName}
         email={formState.email}
-        phone={formState.phone}
         password={formState.password}
         agreedToPrivacy={formState.agreedToPrivacy}
         error={formState.error}
-        onFirstNameChange={(value) => handleFormChange('firstName', value)}
-        onLastNameChange={(value) => handleFormChange('lastName', value)}
-        onEmailChange={(value) => handleFormChange('email', value)}
-        onPhoneChange={(value) => handleFormChange('phone', value)}
-        onPasswordChange={(value) => handleFormChange('password', value)}
-        onAgreedToPrivacyChange={(value) => handleCheckboxChange('agreedToPrivacy', value)}
-        onSubmit={dialogState.isSignUpOpen ? handleSignUp : handleSignIn}
+        onFirstNameChange={(value: string) => handleFormChange('firstName', value)}
+        onLastNameChange={(value: string) => handleFormChange('lastName', value)}
+        onEmailChange={(value: string) => handleFormChange('email', value)}
+        onPasswordChange={(value: string) => handleFormChange('password', value)}
+        onAgreedToPrivacyChange={(value: boolean) => handleCheckboxChange('agreedToPrivacy', value)}
+        onSubmit={handleSignUp}
         onGoogleSignIn={handleSignInWithGoogle}
-        onToggleMode={handleToggleMode}
         onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
+        onSendVerificationCode={handleSendVerificationCode}
+        onVerifyCode={handleVerifyCode}
+        communityName={communityData?.name}
+        prefillData={{
+          firstName: firstName || undefined,
+          lastName: lastName || undefined,
+          email: email || undefined
+        }}
       />
       
       <PrivacyPolicyDialog
