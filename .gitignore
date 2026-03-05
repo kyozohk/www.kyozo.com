@@ -46,3 +46,7 @@ firestore-debug.log
 
 # v2 project
 v2/
+
+# vite project
+vite/dist/
+vite/.turbo
