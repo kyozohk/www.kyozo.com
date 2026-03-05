@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       const htmlContent = getVerificationEmail(recipientName, code);
       
       const { data, error } = await resend.emails.send({
-        from: 'Kyozo <dev@kyozo.com>',
+        from: 'Kyozo <willer@contact.kyozo.com>',
         to: email,
         subject: `Your Kyozo verification code is ${code}`,
         html: htmlContent,

@@ -109,16 +109,10 @@ export default function ArticleDetailPage() {
   const articleImage = article.imageUrl || articleImages[postId];
 
   return (
-    <div className="fixed inset-y-0 right-0 left-[70px] md:left-[105px] z-[50] flex bg-white">
+    <div className="absolute inset-0 z-[60] flex bg-white overflow-hidden">
+
       {/* Left Half - Sidebar with article preview */}
       <div className="hidden md:block w-1/2 bg-[#f5f1e8] p-12 overflow-y-auto relative">
-        <button
-          onClick={() => router.back()}
-          className="mb-8 flex items-center gap-2 text-[#504c4c] hover:text-[#926b7f] transition-colors relative z-10 cursor-pointer"
-        >
-          <X className="size-6" />
-          <span className="font-semibold text-sm uppercase tracking-wide">Close</span>
-        </button>
         
         {articleImage && (
           <div className="mb-8 rounded-[20px] overflow-hidden">
@@ -174,9 +168,9 @@ export default function ArticleDetailPage() {
         </p>
       </div>
 
-      {/* Right Half - Full content with permission wall */}
-      <div className="w-full md:w-1/2 bg-white relative overflow-hidden">
-        {/* Mobile close button */}
+      {/* Right Half - Article content */}
+      <div className="w-full bg-white overflow-hidden flex flex-col">
+        {/* Mobile close button - sticky header */}
         <div className="md:hidden sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-[#e8dfd0] p-4">
           <button
             onClick={() => router.back()}
@@ -187,8 +181,10 @@ export default function ArticleDetailPage() {
           </button>
         </div>
 
-        <div className="h-full overflow-y-auto">
-          <div className="max-w-[680px] mx-auto px-6 md:px-12 py-8 md:py-16">
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="relative max-w-none mx-auto p-4 md:p-12 md:max-w-4xl">
+            <div className="max-w-[680px] mx-auto px-6 md:px-12 py-8 md:py-16">
             {/* Mobile header - only show on mobile */}
             <div className="md:hidden mb-8">
               {articleImage && (
@@ -241,11 +237,12 @@ export default function ArticleDetailPage() {
           </div>
         </div>
       </div>
+      </div>
 
-      {/* Fixed floating sign-in card - bottom center of right panel */}
+      {/* Fixed floating sign-in card - bottom center on mobile, right panel on desktop */}
       {!hasAccess && (
-        <div className="fixed bottom-12 left-[calc(75%+35px)] md:left-[calc(75%+52.5px)] -translate-x-1/2 z-[70] max-w-[600px] w-full px-6">
-          <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-8 shadow-2xl border-2 border-[#e8dfd0]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-[calc(75%+52.5px)] md:translate-x-0 z-[70] max-w-[400px] md:max-w-[600px] w-full px-4 md:px-6">
+          <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-6 md:p-8 shadow-2xl border-2 border-[#e8dfd0]">
             <h3 className="font-bold text-2xl text-[#4f4949] mb-3 text-center">
               Sign in to continue reading
             </h3>

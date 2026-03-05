@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { sidebarIcons } from '@/lib/svg-icons';
+import { useCommunityAuth } from '@/hooks/use-community-auth';
+import { signOut as firebaseSignOut } from 'firebase/auth';
+import { communityAuth } from '@/firebase/community-auth';
 
 type WillerSidebarProps = {
   onSignInClick?: () => void;
@@ -13,6 +16,11 @@ type WillerSidebarProps = {
 
 export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle }: WillerSidebarProps) {
   const pathname = usePathname();
+  const { user } = useCommunityAuth();
+
+  const handleSignOut = async () => {
+    await firebaseSignOut(communityAuth);
+  };
 
   return (
     <aside className="sticky left-0 top-[10px] h-[calc(100vh-20px)] w-[80px] bg-white rounded-[24px] z-40 flex flex-col items-center p-[2px] border-2 border-[#e8dfd0] shrink-0 ml-[10px]">
@@ -144,19 +152,34 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
 
         {/* Join Us and Do More Section */}
         <div className="flex flex-col gap-[12px] items-center">
-          {/* Sign In Button */}
-          <button
-            onClick={onSignInClick}
-            className="flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors hover:bg-[#f5f1e8]"
-          >
-            <div className="relative shrink-0 size-[32px]">
-              <svg className="block size-full" fill="none" viewBox="0 0 32 32">
-                <path d="M16 16c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6z" stroke="#3A3630" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#3A3630" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Sign In</p>
-          </button>
+          {/* Sign In / Sign Out Button */}
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className="flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors hover:bg-[#f5f1e8]"
+            >
+              <div className="relative shrink-0 size-[32px]">
+                <svg className="block size-full" fill="none" viewBox="0 0 32 32">
+                  <path d="M9 16h14M14 11l5 5-5 5" stroke="#3A3630" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M21 8v1a7 7 0 01-7 7H8" stroke="#3A3630" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Sign Out</p>
+            </button>
+          ) : (
+            <button
+              onClick={onSignInClick}
+              className="flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors hover:bg-[#f5f1e8]"
+            >
+              <div className="relative shrink-0 size-[32px]">
+                <svg className="block size-full" fill="none" viewBox="0 0 32 32">
+                  <path d="M16 16c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6z" stroke="#3A3630" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#3A3630" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Sign In</p>
+            </button>
+          )}
 
           {/* Explore Button */}
           {/* <Link

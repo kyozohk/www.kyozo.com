@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON in request body' }, { status: 400 });
     }
     
-    const { to, subject, html, from = 'dev@kyozo.com' } = body;
+    const { to, subject, html, from = 'Kyozo <willer@contact.kyozo.com>' } = body;
 
     if (!to || !subject || !html) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

@@ -233,7 +233,7 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[640px] !p-0 overflow-hidden !bg-white !rounded-[24px] !border-0 [&>button]:hidden">
+      <DialogContent className="sm:max-w-[640px] !p-0 overflow-hidden !bg-white !rounded-[24px] !border-0">
         <DialogTitle className="sr-only">
           {step === 'form' ? (isSignUp ? `Sign Up for ${communityName}` : `Sign In to ${communityName}`) : 'Verify your email'}
         </DialogTitle>
@@ -247,23 +247,20 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
         </button>
 
         {/* Content */}
-        <div className="relative z-10 px-8 md:px-12 py-12">
+        <div className="relative z-10 px-8 md:px-12 py-8">
           {/* Form Step */}
           {step === 'form' && (
             <>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#4f4949] mb-4">
-                  {isSignUp ? 'Sign in to continue reading' : 'Sign in to continue reading'}
+              <div className="text-center mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#4f4949]">
+                  {isSignUp ? 'Sign up to continue' : 'Sign in to continue'}
                 </h2>
-                <p className="text-base text-[#6b6767] leading-relaxed">
-                  Create a free Kyozo account to access full articles, audio content, and exclusive community features.
-                </p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Error Message */}
                 {(error || passwordError) && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-xs">
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2.5 rounded-lg text-sm">
                     {error || passwordError}
                   </div>
                 )}
@@ -278,12 +275,12 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                         value={firstName}
                         onChange={(e) => onFirstNameChange(e.target.value)}
                         placeholder=" "
-                        className="peer w-full px-3 pt-5 pb-2 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4C5DD]/50 focus:border-[#D4C5DD] text-sm"
+                        className="peer w-full px-3 pt-4 pb-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#926b7f] text-sm transition-colors"
                         required
                       />
                       <label
                         htmlFor="firstName"
-                        className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-gray-500"
+                        className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-[#926b7f]"
                       >
                         First Name
                       </label>
@@ -295,12 +292,12 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                         value={lastName}
                         onChange={(e) => onLastNameChange(e.target.value)}
                         placeholder=" "
-                        className="peer w-full px-3 pt-5 pb-2 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4C5DD]/50 focus:border-[#D4C5DD] text-sm"
+                        className="peer w-full px-3 pt-4 pb-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#926b7f] text-sm transition-colors"
                         required
                       />
                       <label
                         htmlFor="lastName"
-                        className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-gray-500"
+                        className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-[#926b7f]"
                       >
                         Last Name
                       </label>
@@ -316,12 +313,12 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                     value={email}
                     onChange={(e) => onEmailChange(e.target.value)}
                     placeholder=" "
-                    className="peer w-full px-3 pt-5 pb-2 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4C5DD]/50 focus:border-[#D4C5DD] text-sm"
+                    className="peer w-full px-3 pt-4 pb-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#926b7f] text-sm transition-colors"
                     required
                   />
                   <label
                     htmlFor="email"
-                    className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-gray-500"
+                    className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-[#926b7f]"
                   >
                     Email
                   </label>
@@ -335,12 +332,12 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                     value={password}
                     onChange={(e) => onPasswordChange(e.target.value)}
                     placeholder=" "
-                    className="peer w-full px-3 pt-5 pb-2 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4C5DD]/50 focus:border-[#D4C5DD] text-sm"
+                    className="peer w-full px-3 pt-4 pb-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#926b7f] text-sm transition-colors"
                     required
                   />
                   <label
                     htmlFor="password"
-                    className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-gray-500"
+                    className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-[#926b7f]"
                   >
                     Password
                   </label>
@@ -355,12 +352,12 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder=" "
-                      className="peer w-full px-3 pt-5 pb-2 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4C5DD]/50 focus:border-[#D4C5DD] text-sm"
+                      className="peer w-full px-3 pt-4 pb-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#926b7f] text-sm transition-colors"
                       required
                     />
                     <label
                       htmlFor="confirmPassword"
-                      className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-gray-500"
+                      className="absolute left-3 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-[#926b7f]"
                     >
                       Confirm Password
                     </label>
@@ -369,19 +366,19 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
 
                 {/* Privacy Policy (Sign Up only) */}
                 {isSignUp && (
-                  <div className="flex items-start gap-2 pt-1">
+                  <div className="flex items-start gap-2">
                     <input
                       type="checkbox"
                       checked={agreedToPrivacy}
                       onChange={(e) => onAgreedToPrivacyChange(e.target.checked)}
-                      className="mt-0.5 w-3.5 h-3.5"
+                      className="mt-0.5 w-4 h-4"
                     />
-                    <label className="text-xs text-gray-600 leading-tight">
+                    <label className="text-sm text-gray-600 leading-tight">
                       I agree to the{' '}
                       <button
                         type="button"
                         onClick={onShowPrivacyPolicy}
-                        className="text-[#8B6B9B] hover:underline font-medium"
+                        className="text-[#926b7f] hover:underline font-medium"
                       >
                         Privacy Policy
                       </button>
@@ -393,7 +390,7 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                 <button
                   onClick={handleSubmitForm}
                   disabled={loading}
-                  className="w-full h-12 bg-[#926b7f] hover:bg-[#7d5a6b] text-white font-semibold rounded-full transition-all disabled:opacity-50 text-sm uppercase tracking-wide mt-6"
+                  className="w-full h-11 bg-[#926b7f] hover:bg-[#7d5a6b] text-white font-semibold rounded-full transition-all disabled:opacity-50 text-sm uppercase tracking-wide mt-2"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
@@ -401,17 +398,73 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
                       {isSignUp ? 'Creating account...' : 'Signing in...'}
                     </span>
                   ) : (
-                    'SIGN IN'
+                    isSignUp ? 'SIGN UP' : 'SIGN IN'
                   )}
                 </button>
 
-                {/* Back to Feed Button */}
+                {/* Divider */}
+                <div className="relative py-3">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="px-3 bg-white text-gray-500 uppercase tracking-wide">Or</span>
+                  </div>
+                </div>
+
+                {/* Google Sign In Button */}
                 <button
-                  onClick={onClose}
-                  className="w-full h-12 bg-transparent border-2 border-[#e8dfd0] text-[#504c4c] font-semibold rounded-full hover:bg-[#f5f1e8] transition-all text-sm uppercase tracking-wide mt-3"
+                  onClick={onGoogleSignIn}
+                  disabled={loading}
+                  className="w-full h-11 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-full transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                 >
-                  BACK TO FEED
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    />
+                  </svg>
+                  Continue with Google
                 </button>
+
+                {/* Toggle Sign In / Sign Up */}
+                <div className="text-center text-sm text-gray-600 mt-4">
+                  {isSignUp ? (
+                    <>
+                      Already have an account?{' '}
+                      <button
+                        type="button"
+                        onClick={toggleMode}
+                        className="text-[#926b7f] hover:underline font-semibold"
+                      >
+                        Sign In
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Don't have an account?{' '}
+                      <button
+                        type="button"
+                        onClick={toggleMode}
+                        className="text-[#926b7f] hover:underline font-semibold"
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           )}
