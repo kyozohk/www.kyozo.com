@@ -16,9 +16,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/hooks/use-auth.tsx';
+import { useAuth } from '@/hooks/use-auth';
 import { signOut } from '@/firebase/auth';
 import { useRouter } from 'next/navigation';
+import { RiLogoutBoxLine } from 'react-icons/ri';
 
 export function UserNav() {
   const { user } = useAuth();
@@ -63,6 +64,7 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
+          <RiLogoutBoxLine className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

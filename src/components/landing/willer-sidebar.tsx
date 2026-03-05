@@ -6,6 +6,7 @@ import { sidebarIcons } from '@/lib/svg-icons';
 import { useCommunityAuth } from '@/hooks/use-community-auth';
 import { signOut as firebaseSignOut } from 'firebase/auth';
 import { communityAuth } from '@/firebase/community-auth';
+import { RiLogoutBoxLine } from 'react-icons/ri';
 
 type WillerSidebarProps = {
   onSignInClick?: () => void;
@@ -158,11 +159,8 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
               onClick={handleSignOut}
               className="flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors hover:bg-[#f5f1e8]"
             >
-              <div className="relative shrink-0 size-[32px]">
-                <svg className="block size-full" fill="none" viewBox="0 0 32 32">
-                  <path d="M9 16h14M14 11l5 5-5 5" stroke="#3A3630" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M21 8v1a7 7 0 01-7 7H8" stroke="#3A3630" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <div className="relative shrink-0 size-[32px] flex items-center justify-center">
+                <RiLogoutBoxLine size={26} color="#3A3630" />
               </div>
               <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">Sign Out</p>
             </button>

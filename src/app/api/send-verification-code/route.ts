@@ -1,85 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
-import { getVerificationEmail } from '@/lib/email-templates';
-
-// In-memory store for verification codes (in production, use Redis or database)
-const verificationCodes = new Map<string, { code: string; expiresAt: number }>();
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { emailService } from '@/lib/email-service';
+import { db } from '@/firebase/admin';
 
 export async function POST(request: NextRequest) {
+  console.log('📧 [VERIFICATION] Starting send-verification-code request');
+  
   try {
-    const { email, name } = await request.json();
+    const body = await request.json();
+    const { email, name } = body;
+    
+    console.log('📧 [VERIFICATION] Request body:', { email, name });
 
     if (!email) {
-      return NextResponse.json(
-        { success: false, message: 'Email is required' },
-        { status: 400 }
-      );
+      console.error('📧 [VERIFICATION] ERROR: Email is missing from request');
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // Check if Resend API key is configured
-    if (!process.env.RESEND_API_KEY) {
-      console.error('❌ RESEND_API_KEY is not configured');
-      return NextResponse.json(
-        { success: false, message: 'Email service is not configured. Please contact support.' },
-        { status: 500 }
-      );
-    }
-
-    // Generate 4-digit code
+    // Generate 4-digit verification code
     const code = Math.floor(1000 + Math.random() * 9000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
     
-    // Store code with 10-minute expiration
-    verificationCodes.set(email.toLowerCase(), {
-      code,
-      expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
-    });
+    console.log('📧 [VERIFICATION] Generated code:', code, 'Expires at:', expiresAt.toISOString());
 
-    // Send email with verification code using Resend
+    // Store verification code in Firestore
+    console.log('📧 [VERIFICATION] Storing code in Firestore for email:', email);
     try {
-      const recipientName = name || email.split('@')[0];
-      const htmlContent = getVerificationEmail(recipientName, code);
+      const verificationRef = db.collection('emailVerifications').doc(email.toLowerCase());
+      await verificationRef.set({
+        code,
+        email: email.toLowerCase(),
+        expiresAt,
+        createdAt: new Date(),
+        verified: false,
+      });
+      console.log('📧 [VERIFICATION] Successfully stored code in Firestore');
+    } catch (firestoreError) {
+      console.error('📧 [VERIFICATION] ERROR storing in Firestore:', firestoreError);
+      throw firestoreError;
+    }
+    
+    // Send verification email using the email service
+    console.log('📧 [VERIFICATION] Sending verification email...');
+    try {
+      const response = await emailService.sendVerificationEmail(email, code, name);
       
-      const { data, error } = await resend.emails.send({
-        from: 'Kyozo <willer@contact.kyozo.com>',
-        to: email,
-        subject: `Your Kyozo verification code is ${code}`,
-        html: htmlContent,
+      console.log(`✅ Verification email sent to ${email}. Message ID: ${response.id}`);
+      
+      return NextResponse.json({ 
+        success: true,
+        message: 'Verification code sent successfully',
+        messageId: response.id,
+        // In development, return the code for testing
+        ...(process.env.NODE_ENV === 'development' && { code })
       });
 
-      if (error) {
-        console.error('❌ Resend API error:', error);
-        throw new Error(error.message || 'Failed to send email');
-      }
-
-      console.log(`✅ Verification email sent to ${email}. Message ID: ${data?.id}`);
-    } catch (emailError: any) {
+    } catch (emailError) {
       console.error('❌ Error sending verification email:', emailError);
       
-      // Check for common Resend errors
-      if (emailError.message?.includes('domain') || emailError.message?.includes('verified')) {
-        return NextResponse.json(
-          { success: false, message: 'Email sending failed: Domain not verified. Please contact support.' },
-          { status: 500 }
-        );
+      // Return a more specific error message
+      if (emailError instanceof Error) {
+        if (emailError.message.includes('domain not verified')) {
+          return NextResponse.json({ 
+            error: 'Email service configuration error. Please contact support.' 
+          }, { status: 500 });
+        }
+        
+        if (emailError.message.includes('timeout')) {
+          return NextResponse.json({ 
+            error: 'Request timeout. Please check your connection and try again.' 
+          }, { status: 408 });
+        }
+        
+        if (emailError.message.includes('Invalid email')) {
+          return NextResponse.json({ 
+            error: 'Please enter a valid email address.' 
+          }, { status: 400 });
+        }
       }
       
-      return NextResponse.json(
-        { success: false, message: `Failed to send verification email: ${emailError.message}` },
-        { status: 500 }
-      );
+      return NextResponse.json({ 
+        error: 'Failed to send verification email. Please try again.' 
+      }, { status: 500 });
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Verification code sent successfully',
-    });
-  } catch (error: any) {
-    console.error('❌ Error in send-verification-code:', error);
-    return NextResponse.json(
-      { success: false, message: error.message || 'Failed to send verification code' },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error('❌ API Error:', error);
+    return NextResponse.json({ 
+      error: 'Internal server error' 
+    }, { status: 500 });
   }
 }

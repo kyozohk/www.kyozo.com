@@ -8,7 +8,8 @@ import { useCommunityAuth } from "@/hooks/use-community-auth";
 import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firestore";
-import { Post } from "@/lib/types";
+import { Post, Community } from "@/lib/types";
+import { getCommunityByHandle } from "@/lib/community-utils";
 import { UnifiedAuthDialog } from "@/components/community/unified-auth-dialog";
 import { useAuthWithVerification } from "@/hooks/use-auth-with-verification";
 
@@ -21,6 +22,7 @@ export default function ArticleDetailPage() {
   const handle = params.handle as string;
   
   const [article, setArticle] = useState<any>(null);
+  const [communityData, setCommunityData] = useState<Community | null>(null);
   const [loading, setLoading] = useState(true);
   
   const {
@@ -38,7 +40,14 @@ export default function ArticleDetailPage() {
   } = useAuthWithVerification();
 
   useEffect(() => {
-    const loadArticle = async () => {
+    const loadData = async () => {
+      // Load community data
+      if (handle) {
+        const community = await getCommunityByHandle(handle);
+        setCommunityData(community);
+      }
+      
+      // Load article
       try {
         // First try to get from Firebase
         const postDoc = await getDoc(doc(db, 'blogs', postId));
@@ -76,9 +85,9 @@ export default function ArticleDetailPage() {
     };
 
     if (postId) {
-      loadArticle();
+      loadData();
     }
-  }, [postId]);
+  }, [postId, handle]);
 
   if (loading) {
     return (
@@ -241,7 +250,7 @@ export default function ArticleDetailPage() {
 
       {/* Fixed floating sign-in card - bottom center on mobile, right panel on desktop */}
       {!hasAccess && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-[calc(75%+52.5px)] md:translate-x-0 z-[70] max-w-[400px] md:max-w-[600px] w-full px-4 md:px-6">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-[calc(75%+52.5px)] md:translate-x-0 z-40 max-w-[400px] md:max-w-[600px] w-full px-4 md:px-6">
           <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-6 md:p-8 shadow-2xl border-2 border-[#e8dfd0]">
             <h3 className="font-bold text-2xl text-[#4f4949] mb-3 text-center">
               Sign in to continue reading
@@ -287,7 +296,9 @@ export default function ArticleDetailPage() {
         onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
         onSendVerificationCode={handleSendVerificationCode}
         onVerifyCode={handleVerifyCode}
-        communityName="Willer"
+        communityName={communityData?.name || "Willer"}
+        communityIcon={communityData?.communityProfileImage}
+        onSignIn={handleSignIn}
       />
     </div>
   );

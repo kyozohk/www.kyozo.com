@@ -2,7 +2,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LogOut, Loader2, ChevronsUpDown } from 'lucide-react';
+import { Loader2, ChevronsUpDown } from 'lucide-react';
+import { RiLogoutBoxLine } from 'react-icons/ri';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -130,7 +131,7 @@ export function UserMenu() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>
-          <LogOut className="mr-2 h-4 w-4" />
+          <RiLogoutBoxLine className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

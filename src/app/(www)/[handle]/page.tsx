@@ -188,7 +188,7 @@ export default function PublicCommunityPage() {
     handleSignInWithGoogle,
     handleToggleMode,
     handleSendVerificationCode,
-    handleVerifyCode
+    handleVerifyCode,
   } = useAuthWithVerification();
 
 
@@ -317,6 +317,8 @@ export default function PublicCommunityPage() {
         onSendVerificationCode={handleSendVerificationCode}
         onVerifyCode={handleVerifyCode}
         communityName={communityData?.name}
+        communityIcon={communityData?.communityProfileImage}
+        onSignIn={handleSignIn}
       />
       
       <PrivacyPolicyDialog
