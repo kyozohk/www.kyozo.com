@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: '/willer-bg.jpg',
         width: 1200,
         height: 630,
-        alt: 'Willer Poole',
+        alt: 'Willer',
       },
     ],
     type: 'website',

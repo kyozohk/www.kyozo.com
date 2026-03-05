@@ -192,20 +192,38 @@ export default function ArticleDetailPage() {
 
         {/* Scrollable content area */}
         <div className="flex-1 overflow-y-auto">
-          <div className="relative max-w-none mx-auto p-4 md:p-12 md:max-w-4xl">
-            <div className="max-w-[680px] mx-auto px-6 md:px-12 py-8 md:py-16">
-            {/* Mobile header - only show on mobile */}
-            <div className="md:hidden mb-8">
-              {articleImage && (
-                <div className="mb-6 rounded-[20px] overflow-hidden">
-                  <img 
-                    src={articleImage} 
-                    alt={article.title}
-                    className="w-full h-[250px] object-cover"
-                  />
+          {/* Mobile media section - full width, above content */}
+          <div className="md:hidden bg-black">
+            {article.type === 'video' && article.imageUrl ? (
+              <video
+                src={article.imageUrl}
+                controls
+                className="w-full max-h-[280px] object-contain bg-black"
+                poster={article.thumbnailUrl}
+                playsInline
+              />
+            ) : article.type === 'audio' && article.imageUrl ? (
+              <div className="bg-[#e8dfd0] p-8 flex flex-col items-center justify-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#926b7f] rounded-full mb-4">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
+                  </svg>
                 </div>
-              )}
-              
+                <audio src={article.imageUrl} controls className="w-full" />
+              </div>
+            ) : articleImage ? (
+              <img
+                src={articleImage}
+                alt={article.title}
+                className="w-full max-h-[280px] object-cover"
+              />
+            ) : null}
+          </div>
+
+          <div className="relative max-w-none mx-auto md:p-12 md:max-w-4xl">
+            <div className="max-w-[680px] mx-auto px-4 md:px-12 py-6 md:py-16">
+            {/* Mobile header metadata - only show on mobile */}
+            <div className="md:hidden mb-6">
               <div className="flex gap-2 items-center mb-4">
                 <span className="bg-[#926b7f] text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide">
                   {article.category}
@@ -215,7 +233,7 @@ export default function ArticleDetailPage() {
                 </span>
               </div>
 
-              <h1 className="font-bold text-4xl text-[#4f4949] tracking-[-1px] leading-[42px] mb-4">
+              <h1 className="font-bold text-3xl text-[#4f4949] tracking-[-1px] leading-[36px] mb-4">
                 {article.title}
               </h1>
             </div>

@@ -77,8 +77,8 @@ export function ImageCard({ category, readTime, date, title, summary, imageUrl, 
   return (
     <>
       <div className="relative bg-neutral-900 overflow-hidden shadow-md group cursor-pointer transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] min-h-[400px] rounded-3xl" style={cardStyle}>
-        {/* Black overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Black overlay - only on desktop */}
+        <div className="absolute inset-0 bg-black/50 hidden md:block" />
         
         {isPostCreator && (
           <div className="absolute top-2 right-2 flex gap-1 z-30">
@@ -91,8 +91,64 @@ export function ImageCard({ category, readTime, date, title, summary, imageUrl, 
           </div>
         )}
         
-        {/* Content overlay */}
-        <div className="relative z-10 p-6 flex flex-col h-full min-h-[400px]">
+        {/* Mobile Layout - Image on top, content below */}
+        <div className="flex flex-col md:hidden h-full">
+            {/* Image section - mobile */}
+            <div className="relative h-48">
+                <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+                {isPostCreator && (
+                    <div className="absolute top-2 right-2 flex gap-1 z-30">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
+                            <Edit className="h-4 w-4 text-gray-700" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); setShowDeleteDialog(true)}}>
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                    </div>
+                )}
+                {isPrivate && (
+                    <div className="absolute top-2 left-2 bg-red-500 rounded-full p-2 shadow-lg">
+                        <Lock className="w-4 h-4 text-white" />
+                    </div>
+                )}
+            </div>
+            
+            {/* Content below image - mobile */}
+            <div className="flex-1 bg-white p-4">
+                <div className="flex items-center gap-2 mb-3">
+                    <span className="px-3 py-1 text-xs uppercase tracking-wide bg-[#926B7F] text-white rounded-full font-medium">
+                        {category}
+                    </span>
+                </div>
+                
+                <h2 className="font-bold text-lg text-gray-900 leading-tight mb-2" style={cardTitleStyle}>
+                    {title}
+                </h2>
+                
+                {summary && (
+                    <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-3" style={cardBodyStyle}>
+                        {summary}
+                    </p>
+                )}
+                
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:bg-gray-100" onClick={handleLike}>
+                        <ThumbsUp className={`h-4 w-4 ${isLiked ? 'text-pink-500' : ''}`} />
+                        <span>{likes}</span>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:bg-gray-100" onClick={handleComment}>
+                        <MessageSquare className="h-4 w-4" />
+                        <span>{post.comments || 0}</span>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:bg-gray-100" onClick={handleShare}>
+                        <Share2 className="h-4 w-4" />
+                    </Button>
+                </div>
+            </div>
+        </div>
+        
+        {/* Desktop Layout - overlay style */}
+        <div className="relative z-10 p-6 flex flex-col h-full min-h-[400px] hidden md:flex">
           <div className="flex justify-between items-start mb-4">
             <span className="px-3 py-1 text-xs uppercase tracking-wide bg-[#926B7F] text-white rounded-full font-medium">
               {category}

@@ -4,7 +4,7 @@ import { Play, Pause, Lock, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../ui';
 import { Post } from '@/lib/types';
 import { useCommunityAuth } from '@/hooks/use-community-auth';
-import { recordInteraction } from '@/lib/interaction-utils';
+import { toggleLike, recordInteraction } from '@/lib/interaction-utils';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { deletePost } from '@/lib/post-utils';
@@ -131,9 +131,6 @@ export function ListenCard({ category, episode, duration: initialDuration, title
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
         <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-[400px] flex flex-col" style={cardStyle}>
-        {isPrivate && (
-          <div className="absolute top-4 right-4 z-10"><div className="bg-red-500 rounded-full p-2 shadow-lg"><Lock className="w-4 h-4 text-white" /></div></div>
-        )}
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-20">
                 <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
@@ -144,7 +141,52 @@ export function ListenCard({ category, episode, duration: initialDuration, title
                 </Button>
             </div>
         )}
-        <div className="px-4 pt-4 pb-6 h-full flex flex-col gap-4">
+        
+        {/* Mobile Layout - Audio visual on top, content below */}
+        <div className="flex flex-col md:hidden h-full">
+            {/* Audio visual section - mobile */}
+            <div className="relative h-48 bg-gradient-to-br from-[#6e94b1] to-[#5a7a94] flex items-center justify-center">
+                {isPrivate && (
+                    <div className="absolute top-2 right-2 bg-red-500 rounded-full p-2 shadow-lg">
+                        <Lock className="w-4 h-4 text-white" />
+                    </div>
+                )}
+                
+                <div className="flex flex-col items-center gap-4">
+                    <button onClick={togglePlayPause} className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 flex items-center justify-center transition-all shadow-lg">
+                        {isPlaying ? <Pause className="w-6 h-6 text-white" /> : <Play className="w-6 h-6 text-white ml-1" />}
+                    </button>
+                    <div className="w-full px-6">
+                        <Waveform isPlaying={isPlaying} currentTime={currentTime} duration={duration} />
+                    </div>
+                </div>
+            </div>
+            
+            {/* Content below audio visual - mobile */}
+            <div className="flex-1 bg-white p-4">
+                <div className="flex items-center gap-2 mb-3">
+                    <span className="bg-[#6e94b1] text-white text-[9.6px] font-medium px-3 py-1.5 rounded-full uppercase tracking-[0.38px]">
+                        {category}
+                    </span>
+                    <p className="text-[10.5px] text-[#3f3d3d] uppercase tracking-[0.35px]">
+                        {episode} • {formatTime(duration)}
+                    </p>
+                </div>
+                
+                <h2 className="font-bold text-lg text-gray-900 leading-tight mb-2 line-clamp-2" style={{ color: CARD_TITLE_COLOR }}>
+                    {title}
+                </h2>
+                
+                {summary && <p className="text-sm text-gray-600 leading-relaxed line-clamp-2" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
+            </div>
+        </div>
+        
+        {/* Desktop Layout - original style */}
+        <div className="px-4 pt-4 pb-6 h-full flex flex-col gap-4 hidden md:flex">
+          {isPrivate && (
+            <div className="absolute top-4 right-4 z-10"><div className="bg-red-500 rounded-full p-2 shadow-lg"><Lock className="w-4 h-4 text-white" /></div></div>
+          )}
+          
           {/* Top - Title and metadata */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">

@@ -202,9 +202,9 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
         )}
         
         <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="relative bg-neutral-900 overflow-hidden group cursor-pointer transition-shadow duration-300 hover:shadow-lg h-[400px] rounded-2xl flex flex-col" style={cardStyle}>
-        {/* Black overlay */}
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+        <div className="relative bg-neutral-900 overflow-hidden group cursor-pointer transition-shadow duration-300 hover:shadow-lg rounded-2xl flex flex-col md:flex-col h-[400px] md:h-[400px] md:style={cardStyle}" style={{ backgroundColor: '#1a1a1a' }}>
+        {/* Black overlay - only on desktop */}
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors hidden md:block" />
         
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-30">
@@ -231,7 +231,83 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
             />
         ) : null}
 
-        <div className="relative z-10 p-4 md:p-6 flex flex-col justify-between h-full min-h-[400px]">
+        {/* Mobile Layout - Video on top, content below */}
+        <div className="flex flex-col md:hidden h-full">
+            {/* Video thumbnail and controls - mobile */}
+            <div className="relative h-48 bg-black">
+                {isPostCreator && (
+                    <div className="absolute top-2 right-2 flex gap-1 z-30">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
+                            <Edit className="h-4 w-4 text-gray-700" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); setShowDeleteDialog(true)}}>
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                    </div>
+                )}
+                
+                {/* Always show video element with poster */}
+                {post.content.mediaUrls?.[0] ? (
+                    <video 
+                        ref={videoRef}
+                        src={post.content.mediaUrls[0]}
+                        className="w-full h-48 object-cover"
+                        poster={thumbnail}
+                        onPause={() => setIsPlaying(false)}
+                        onPlay={() => setIsPlaying(true)}
+                        onEnded={handleVideoEnded}
+                    />
+                ) : (
+                    <div className="w-full h-48 flex items-center justify-center">
+                        <img src={thumbnail} alt={title} className="w-full h-48 object-cover" />
+                    </div>
+                )}
+                
+                {/* Play button overlay - show when not playing */}
+                {!isPlaying && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <button 
+                            onClick={togglePlayPause} 
+                            className="bg-[#f0c679] rounded-full size-12 flex items-center justify-center hover:bg-[#e8be67] transition-colors"
+                        >
+                            <Play className="w-5 h-5 ml-0.5" />
+                        </button>
+                    </div>
+                )}
+                
+                {isPrivate && (
+                    <div className="absolute top-2 left-2 bg-red-500 rounded-full p-2 shadow-lg">
+                        <Lock className="w-4 h-4 text-white" />
+                    </div>
+                )}
+            </div>
+            
+            {/* Content below video - mobile */}
+            <div className="flex-1 bg-white p-4">
+                <div className="flex items-center gap-2 mb-3">
+                    <span className="bg-[#f0c679] text-black text-[10px] font-medium px-2.5 py-1.5 rounded-full uppercase tracking-[0.5px]">
+                      Watch
+                    </span>
+                    <p className="text-sm font-medium text-gray-600">
+                        {formatTime(currentTime)} / {formatTime(duration)}
+                    </p>
+                </div>
+                
+                <h2 className="font-bold text-lg text-gray-900 leading-tight mb-2">
+                    {title}
+                </h2>
+                
+                <div className="bg-[#c4c4c4] border border-[#8f8f8f] rounded-full w-full p-px mb-2">
+                    <div 
+                        className="bg-[#f7d47a] rounded-full size-2 transition-all duration-200"
+                        style={{ marginLeft: `${Math.max(0, progress - 2)}%` }}
+                    />
+                </div>
+            </div>
+        </div>
+        
+        {/* Desktop Layout - overlay style */}
+        <div className="relative z-10 p-4 md:p-6 flex flex-col justify-between h-full min-h-[400px] hidden md:flex">
             <div className="flex justify-between items-start">
                 <span className="bg-[#f0c679] text-black text-[10px] font-medium px-2.5 py-1.5 rounded-full uppercase tracking-[0.5px]">
                   Watch
