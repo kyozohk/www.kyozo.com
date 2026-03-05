@@ -124,17 +124,13 @@ export function ListenCard({ category, episode, duration: initialDuration, title
   };
   
   const cardStyle = {
-    backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E\")",
-    backgroundColor: 'rgb(245, 241, 232)'
-  };
-  const innerDivStyle = {
-    backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E\")"
+    backgroundColor: '#fbfaf4'
   };
 
   return (
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl h-full flex flex-col" style={cardStyle}>
+        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-full flex flex-col" style={cardStyle}>
         {isPrivate && (
           <div className="absolute top-4 right-4 z-10"><div className="bg-red-500 rounded-full p-2 shadow-lg"><Lock className="w-4 h-4 text-white" /></div></div>
         )}
@@ -148,21 +144,21 @@ export function ListenCard({ category, episode, duration: initialDuration, title
                 </Button>
             </div>
         )}
-        <div className="p-6 h-full flex flex-col gap-4" style={innerDivStyle}>
+        <div className="px-4 pt-4 pb-6 h-full flex flex-col gap-4">
           {/* Top - Title and metadata */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs uppercase tracking-wide bg-[#6E94B1] text-white rounded-full font-medium">
+              <span className="bg-[#6e94b1] text-white text-[9.6px] md:text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-[0.38px]">
                 {category}
               </span>
-              <p className="text-neutral-500 uppercase tracking-wide text-xs">
+              <p className="text-[10.5px] text-[#3f3d3d] uppercase tracking-[0.35px]">
                 {episode} • {formatTime(duration)}
               </p>
             </div>
-            <h2 className="text-4xl" style={{ ...cardTitleStyle, color: CARD_TITLE_COLOR }}>
+            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-0.25px] leading-[30px] mb-[12px] pt-[0.5px]" style={{ color: CARD_TITLE_COLOR }}>
               {title}
             </h2>
-            {summary && <p className="text-sm line-clamp-2" style={{ ...cardBodyStyle, color: CARD_BODY_COLOR }}>{summary}</p>}
+            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.15px] mb-[36px] h-[48px] overflow-clip" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
           </div>
           
           {/* Bottom - Playback controls */}

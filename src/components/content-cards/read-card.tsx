@@ -57,11 +57,7 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
   };
   
   const cardStyle = {
-    backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E\")",
-    backgroundColor: 'rgb(245, 241, 232)'
-  };
-  const innerDivStyle = {
-    backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E\")"
+    backgroundColor: '#fbfaf4'
   };
 
   const imageUrl = post.content.mediaUrls?.[0];
@@ -69,7 +65,7 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
   return (
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="bg-white overflow-hidden shadow-md cursor-pointer relative group transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] rounded-3xl h-full flex flex-col" style={cardStyle}>
+        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-full flex flex-col" style={cardStyle}>
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-20">
                 <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
@@ -80,14 +76,14 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
                 </Button>
             </div>
         )}
-        <div className="p-6 h-full flex flex-col gap-4" style={innerDivStyle}>
+        <div className="p-4 md:p-6 h-full flex flex-col gap-4">
           {/* Category badge and metadata at top */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs uppercase tracking-wide bg-[#926B7F] text-white rounded-full font-medium">
+              <span className="bg-[#926b7f] text-white text-[9.6px] md:text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide">
                 {category}
               </span>
-              <p className="text-neutral-500 uppercase tracking-wide text-xs">
+              <p className="text-[10.5px] md:text-xs text-[#3f3d3d] uppercase tracking-wide">
                 {readTime} {date && `• ${date}`}
               </p>
               {post.visibility === 'private' && (
@@ -109,17 +105,15 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
             </div>
           )}
           
-            <h2 className="text-4xl font-black" style={{ ...cardTitleStyle, color: CARD_TITLE_COLOR }}>
+            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-1px] leading-[30px] md:leading-[38px]" style={{ color: CARD_TITLE_COLOR }}>
               {title}
             </h2>
-            {summary && <p className="text-sm line-clamp-2" style={{ ...cardBodyStyle, color: CARD_BODY_COLOR }}>{summary}</p>}
+            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.2px]" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
           </div>
           
           {/* Read Full Article link */}
-          <div className="px-6 pb-6">
-            <div className="flex items-center justify-end">
-              <span className="text-[#504c4c] hover:text-neutral-700 transition-colors uppercase tracking-[0.35px] text-xs md:text-sm">Read Full Article →</span>
-            </div>
+          <div className="flex justify-end">
+            <span className="font-semibold text-[12px] md:text-sm text-[#847B74] uppercase tracking-[0.3px] leading-none px-[0px] pt-[8px] pb-[0px]">Read Full Article →</span>
           </div>
         </div>
         </div>

@@ -206,7 +206,7 @@ export default function PublicCommunityPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#bfbebd] flex">
+    <div className="relative min-h-screen flex" style={{ backgroundColor: '#d6d4c9' }}>
       {/* Sidebar */}
       <WillerSidebar
         profileImage={communityData?.communityProfileImage || imgEllipse1}
@@ -216,37 +216,32 @@ export default function PublicCommunityPage() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0">
-        {/* Background overlay */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bg-[rgba(231,226,215,0.8)] inset-0 mix-blend-overlay" />
-        </div>
-
+      <div className="flex-1 min-w-0 pl-[10px] pr-[10px]">
         {/* Header with Filter Tabs */}
-        <header className="sticky top-0 z-50 backdrop-blur-[2px] px-2 md:px-12 pt-[13px] pb-2 md:py-4">
-          <div className="max-w-[1632px] mx-auto flex items-center justify-center md:justify-between gap-3 md:gap-8 relative">
-            <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:flex-1 flex items-center justify-center" style={{ left: 'calc(30px + 50%)' }}>
+        <header className="sticky top-0 z-50 backdrop-blur-[2px] px-0 pt-[20px] pb-2 md:py-4">
+          <div className="max-w-[1632px] mx-auto flex items-center justify-center md:justify-between gap-3 md:gap-8 relative mx-[0px] mt-[8px] mb-[0px]">
+            <div className="md:flex-1 flex items-center justify-center">
               <WillerFilterTabs activeFilter={activeFilter} onFilterChange={setActiveFilter} />
             </div>
           </div>
         </header>
 
         {/* Main Feed Content */}
-        <main className="relative z-10 pb-8 md:pb-12">
-          <div className="max-w-[1090px] mx-auto px-3 md:px-6">
+        <main className="pb-8 md:pb-12">
+          <div className="max-w-[1090px] mx-auto px-0">
           {/* Hero Section with Profile Picture */}
-          <section className="mb-4 md:mb-6 flex flex-col md:flex-row items-start justify-between gap-3 md:gap-6 pt-4 md:pt-6">
+          <section className="mb-4 md:mb-6 flex flex-col md:flex-row items-start justify-between gap-3 md:gap-6 px-[12px] pt-[0px] pb-[12px]">
             <div className="flex-1 w-full">
               <h2
-                className="font-bold text-2xl md:text-5xl leading-[32px] md:leading-[58px] tracking-[-0.5px] md:tracking-[-1px] mb-2 md:mb-3 bg-clip-text"
+                className="font-bold leading-[32px] md:leading-[52px] tracking-[-0.5px] md:tracking-[-1px] bg-clip-text text-[32px] md:text-[48px] mx-[0px] mt-[0px] mb-[12px]"
                 style={{
-                  backgroundImage: "linear-gradient(59.5982deg, rgb(156, 165, 198) 3.1066%, rgb(186, 193, 224) 97.105%)",
+                  backgroundImage: "linear-gradient(166.8195deg, rgb(90, 155, 185) 11.465%, rgb(75, 135, 170) 106.65%)",
                   WebkitTextFillColor: "transparent",
                 }}
               >
                 Welcome to the {communityData?.name || 'Willer'} Universe
               </h2>
-              <p className="text-sm md:text-2xl text-[#94a3b8] font-normal leading-[22px] md:leading-normal">
+              <p className="font-normal leading-[22px] md:leading-normal text-[#68a5ba] text-[15px] md:text-[18px]">
                 A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.
               </p>
             </div>
@@ -263,22 +258,30 @@ export default function PublicCommunityPage() {
 
           {/* Compact Join CTA */}
           {!user && (
-            <section className="bg-gradient-to-br from-[#8abfd6] to-[#6da4be] rounded-[12px] md:rounded-[16px] p-3 md:p-4 mb-4 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
-              <div className="flex-1 w-full">
-                <p className="text-[13px] md:text-[16px] text-[#f5f1e8] leading-5 md:leading-6 tracking-[-0.1px] md:tracking-[-0.2px]">
-                  <span className="font-bold text-[#ffdea8]">I'd love you to join the community</span> to view full content, updates and insights. Please join or sign in.
+            <section 
+              className="rounded-[12px] mb-4 md:mb-8 p-[16px] md:p-[20px] flex flex-col md:flex-row md:items-center md:justify-between gap-[4px]"
+              style={{
+                backgroundImage: "linear-gradient(-8.19332deg, rgb(143, 195, 212) 17.065%, rgb(116, 176, 207) 98.418%)"
+              }}
+            >
+              <div className="flex flex-col gap-[4px] md:flex-1">
+                <p className="font-bold leading-[26px] text-[#ffdea8] text-[24px] tracking-[-0.4125px]">
+                  I'd love you to join the community
+                </p>
+                <p className="font-normal leading-[20px] text-[#f5f1e8] text-[14px] md:text-[15px] tracking-[-0.4125px]">
+                  View full content, updates and insights. Please join or sign in.
                 </p>
               </div>
-              <div className="flex items-center gap-0 flex-shrink-0">
+              <div className="flex gap-[8px] items-center mx-[0px] mt-[8px] md:mt-0 mb-[0px]">
                 <button
                   onClick={() => setDialogState({ ...dialogState, isSignUpOpen: true, isSignInOpen: false })}
-                  className="bg-[#62b7c8] border-2 border-[#40b8d0] px-3 md:px-4 py-1.5 md:py-2 rounded-l-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#53a3b4] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
+                  className="bg-[#9bd9e6] border border-[#5293a1] h-[36px] md:h-[40px] w-[120px] rounded-[99px] font-bold text-[12px] text-[#42808e] hover:bg-[#8bc9d6] transition-colors"
                 >
                   Join
                 </button>
                 <button
                   onClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
-                  className="bg-[#5293a1] border-2 border-[#40b8d0] border-l-0 px-3 md:px-4 py-1.5 md:py-2 rounded-r-[14px] font-bold text-xs md:text-sm text-white hover:bg-[#467f8d] transition-colors h-[32px] md:h-[40px] whitespace-nowrap"
+                  className="bg-[#42808e] border border-[#42808e] h-[36px] md:h-[40px] w-[120px] rounded-[99px] font-bold text-[12px] text-white hover:bg-[#377380] transition-colors"
                 >
                   Sign in
                 </button>

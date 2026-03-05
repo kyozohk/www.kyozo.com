@@ -202,9 +202,9 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
         )}
         
         <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="relative bg-neutral-900 overflow-hidden shadow-md group cursor-pointer transition-all duration-300 hover:shadow-xl ease-in-out hover:scale-[1.02] h-full rounded-3xl flex flex-col" style={cardStyle}>
+        <div className="relative bg-neutral-900 overflow-hidden group cursor-pointer transition-shadow duration-300 hover:shadow-lg h-full rounded-2xl flex flex-col" style={cardStyle}>
         {/* Black overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
         
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-30">
@@ -233,7 +233,7 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
 
         <div className="relative z-10 p-4 md:p-6 flex flex-col justify-between h-full min-h-[400px]">
             <div className="flex justify-between items-start">
-                <span className="px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#F0C679] text-black rounded-full font-medium">
+                <span className="bg-[#f0c679] text-black text-[10px] font-medium px-2.5 py-1.5 rounded-full uppercase tracking-[0.5px]">
                   Watch
                 </span>
                 {isPrivate && (
@@ -244,26 +244,26 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
             </div>
             
             <div className="space-y-3">
-                <h2 className="text-white text-4xl drop-shadow-lg" style={cardTitleStyle}>
+                <h2 className="font-bold text-[28px] md:text-4xl text-white tracking-[-0.72px] leading-[30px] md:leading-10">
                     {title}
                 </h2>
                 
                 <div className="flex items-center gap-3">
                     <button 
                         onClick={togglePlayPause} 
-                        className="w-12 h-12 rounded-full bg-[#F0C679] flex items-center justify-center text-black hover:bg-[#E5B960] transition-colors flex-shrink-0"
+                        className="bg-[#f0c679] rounded-full size-12 flex items-center justify-center hover:bg-[#e8be67] transition-colors relative flex-shrink-0"
                     >
                         {isPlaying ? <Pause className="h-5 w-5"/> : <Play className="w-5 h-5 ml-0.5" />}
                     </button>
                     
                     <div className="flex-1 space-y-1">
-                        <div className="text-white text-sm font-medium">
+                        <p className="text-sm font-medium text-white leading-5">
                             {formatTime(currentTime)} / {formatTime(duration)}
-                        </div>
-                        <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+                        </p>
+                        <div className="bg-[#c4c4c4] border border-[#8f8f8f] rounded-full w-full p-px">
                             <div 
-                                className="h-full bg-[#F0C679] transition-all duration-200"
-                                style={{ width: `${progress}%` }}
+                                className="bg-[#f7d47a] rounded-full size-2 transition-all duration-200"
+                                style={{ marginLeft: `${Math.max(0, progress - 2)}%` }}
                             />
                         </div>
                     </div>
