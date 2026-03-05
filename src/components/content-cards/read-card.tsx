@@ -65,7 +65,20 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
   return (
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-[400px] flex flex-col" style={cardStyle}>
+        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-[400px] flex flex-col" style={imageUrl ? {} : cardStyle}>
+        {/* Background Image if present */}
+        {imageUrl && (
+          <>
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+          </>
+        )}
+        
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-20">
                 <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
@@ -76,14 +89,21 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
                 </Button>
             </div>
         )}
-        <div className="p-4 md:p-6 h-full flex flex-col gap-4">
+        
+        <div className="relative z-10 p-4 md:p-6 h-full flex flex-col">
           {/* Category badge and metadata at top */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="bg-[#926b7f] text-white text-[9.6px] md:text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide">
+              <span className={cn(
+                "text-[9.6px] md:text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wide",
+                imageUrl ? "bg-[rgba(146,107,127,0.9)] text-white" : "bg-[#926b7f] text-white"
+              )}>
                 {category}
               </span>
-              <p className="text-[10.5px] md:text-xs text-[#3f3d3d] uppercase tracking-wide">
+              <p className={cn(
+                "text-[10.5px] md:text-xs uppercase tracking-wide",
+                imageUrl ? "text-white" : "text-[#3f3d3d]"
+              )}>
                 {readTime} {date && `• ${date}`}
               </p>
               {post.visibility === 'private' && (
@@ -93,27 +113,27 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
               )}
             </div>
           
-          {/* Image if present */}
-          {imageUrl && (
-            <div className="relative w-full aspect-video overflow-hidden rounded-xl">
-              <Image
-                src={imageUrl}
-                alt={title}
-                fill
-                className="object-cover"
-              />
-            </div>
-          )}
-          
-            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-1px] leading-[30px] md:leading-[38px] line-clamp-2" style={{ color: CARD_TITLE_COLOR }}>
+            <h2 className={cn(
+              "font-bold text-[28px] md:text-4xl tracking-[-1px] leading-[30px] md:leading-[38px] line-clamp-2",
+              imageUrl && "text-white"
+            )} style={imageUrl ? {} : { color: CARD_TITLE_COLOR }}>
               {title}
             </h2>
-            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.2px] line-clamp-3" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
+            {summary && <p className={cn(
+              "text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.2px] line-clamp-3",
+              imageUrl && "text-white/90"
+            )} style={imageUrl ? {} : { color: CARD_BODY_COLOR }}>{summary}</p>}
           </div>
+          
+          {/* Spacer to push READ FULL ARTICLE to bottom */}
+          <div className="flex-grow" />
           
           {/* Read Full Article link */}
           <div className="flex justify-end">
-            <span className="font-semibold text-[12px] md:text-sm text-[#847B74] uppercase tracking-[0.3px] leading-none px-[0px] pt-[8px] pb-[0px]">Read Full Article →</span>
+            <span className={cn(
+              "font-semibold text-[12px] md:text-sm uppercase tracking-[0.3px] leading-none",
+              imageUrl ? "text-white" : "text-[#847B74]"
+            )}>Read Full Article →</span>
           </div>
         </div>
         </div>

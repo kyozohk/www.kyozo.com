@@ -109,7 +109,7 @@ export default function ArticleDetailPage() {
   const articleImage = article.imageUrl || articleImages[postId];
 
   return (
-    <div className="fixed inset-y-0 right-0 left-[70px] md:left-[105px] z-[60] flex bg-white">
+    <div className="fixed inset-y-0 right-0 left-[70px] md:left-[105px] z-[50] flex bg-white">
       {/* Left Half - Sidebar with article preview */}
       <div className="hidden md:block w-1/2 bg-[#f5f1e8] p-12 overflow-y-auto relative">
         <button

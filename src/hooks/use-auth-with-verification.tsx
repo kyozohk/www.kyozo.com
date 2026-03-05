@@ -98,10 +98,12 @@ export const AuthWithVerificationProvider = ({ children }: { children: ReactNode
 
   const handleSendVerificationCode = async (email: string) => {
     try {
+      const name = `${formState.firstName} ${formState.lastName}`.trim() || email.split('@')[0];
+      
       const response = await fetch('/api/send-verification-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, name }),
       });
 
       const data = await response.json();
@@ -122,16 +124,6 @@ export const AuthWithVerificationProvider = ({ children }: { children: ReactNode
         title: "Code sent!", 
         description: `Check your email at ${email}`,
       });
-
-      // In development, show the code in console
-      if (data.devCode) {
-        console.log('🔐 DEV - Verification code:', data.devCode);
-        toast({
-          title: "DEV MODE",
-          description: `Code: ${data.devCode}`,
-          duration: 10000,
-        });
-      }
     } catch (error: any) {
       setFormState(prev => ({ ...prev, error: error.message }));
       throw error;

@@ -51,7 +51,7 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
       
       const handleLoadedData = () => {
         if (video.duration) {
-          video.currentTime = video.duration / 2; // Seek to the middle
+          video.currentTime = 0.5; // Seek to 0.5 seconds
         }
       };
       
