@@ -9,8 +9,27 @@ import { CommunityAuthProvider } from '@/hooks/use-community-auth';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Kyozo',
-  description: 'The universe of communities.',
+  title: 'Willer Poole – Notes on Creativity, Music, and Process',
+  description: 'A personal space where Hong Kong DJ and curator Willer Poole shares concise reflections on creativity, music, and the artistic process—offering honest insights, experiments, and ideas behind his work.',
+  openGraph: {
+    title: 'Willer Poole – Notes on Creativity, Music, and Process',
+    description: 'A personal space where Hong Kong DJ and curator Willer Poole shares concise reflections on creativity, music, and the artistic process—offering honest insights, experiments, and ideas behind his work.',
+    images: [
+      {
+        url: '/willer-bg.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Willer Poole',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Willer Poole – Notes on Creativity, Music, and Process',
+    description: 'A personal space where Hong Kong DJ and curator Willer Poole shares concise reflections on creativity, music, and the artistic process—offering honest insights, experiments, and ideas behind his work.',
+    images: ['/og-image.png'],
+  },
   icons: {
     icon: '/favicon.svg',
   },
