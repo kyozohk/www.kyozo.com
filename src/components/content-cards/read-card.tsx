@@ -65,7 +65,7 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
   return (
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-full flex flex-col" style={cardStyle}>
+        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-[400px] flex flex-col" style={cardStyle}>
         {isPostCreator && (
             <div className="absolute top-2 right-2 flex gap-1 z-20">
                 <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white rounded-full" onClick={(e) => {e.stopPropagation(); post._onEdit?.()}}>
@@ -105,10 +105,10 @@ export function ReadCard({ post, category, readTime, date, title, summary, isPri
             </div>
           )}
           
-            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-1px] leading-[30px] md:leading-[38px]" style={{ color: CARD_TITLE_COLOR }}>
+            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-1px] leading-[30px] md:leading-[38px] line-clamp-2" style={{ color: CARD_TITLE_COLOR }}>
               {title}
             </h2>
-            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.2px]" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
+            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.2px] line-clamp-3" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
           </div>
           
           {/* Read Full Article link */}

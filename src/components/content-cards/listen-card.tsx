@@ -130,7 +130,7 @@ export function ListenCard({ category, episode, duration: initialDuration, title
   return (
     <>
       <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-full flex flex-col" style={cardStyle}>
+        <div className="overflow-hidden cursor-pointer relative group transition-shadow duration-300 hover:shadow-lg rounded-[20px] h-[400px] flex flex-col" style={cardStyle}>
         {isPrivate && (
           <div className="absolute top-4 right-4 z-10"><div className="bg-red-500 rounded-full p-2 shadow-lg"><Lock className="w-4 h-4 text-white" /></div></div>
         )}
@@ -155,10 +155,10 @@ export function ListenCard({ category, episode, duration: initialDuration, title
                 {episode} • {formatTime(duration)}
               </p>
             </div>
-            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-0.25px] leading-[30px] mb-[12px] pt-[0.5px]" style={{ color: CARD_TITLE_COLOR }}>
+            <h2 className="font-bold text-[28px] md:text-4xl tracking-[-0.25px] leading-[30px] mb-[12px] pt-[0.5px] line-clamp-2" style={{ color: CARD_TITLE_COLOR }}>
               {title}
             </h2>
-            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.15px] mb-[36px] h-[48px] overflow-clip" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
+            {summary && <p className="text-[14px] md:text-base leading-[22px] md:leading-6 tracking-[-0.15px] mb-[12px] line-clamp-2" style={{ color: CARD_BODY_COLOR }}>{summary}</p>}
           </div>
           
           {/* Bottom - Playback controls */}

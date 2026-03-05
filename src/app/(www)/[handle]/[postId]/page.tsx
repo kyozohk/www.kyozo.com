@@ -9,17 +9,33 @@ import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firestore";
 import { Post } from "@/lib/types";
+import { UnifiedAuthDialog } from "@/components/community/unified-auth-dialog";
+import { useAuthWithVerification } from "@/hooks/use-auth-with-verification";
 
 export default function ArticleDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { isLoggedIn, hasJoinedCommunity, setShowSignInModal, setShowJoinCommunityModal } = useCommunityAuth();
+  const { user } = useCommunityAuth();
   
   const postId = params.postId as string;
   const handle = params.handle as string;
   
   const [article, setArticle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  
+  const {
+    dialogState,
+    setDialogState,
+    formState,
+    handleFormChange,
+    handleCheckboxChange,
+    handleSignUp,
+    handleSignIn,
+    handleSignInWithGoogle,
+    handleToggleMode,
+    handleSendVerificationCode,
+    handleVerifyCode
+  } = useAuthWithVerification();
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -31,9 +47,9 @@ export default function ArticleDetailPage() {
           setArticle({
             id: postId,
             title: postData.title || 'Untitled',
-            excerpt: postData.summary || 'No excerpt available',
+            excerpt: postData.content?.text?.substring(0, 200) || 'No excerpt available',
             content: postData.content?.text || 'No content available',
-            category: postData.category || 'Article',
+            category: postData.type || 'Article',
             readTime: '3 min read',
             date: postData.createdAt?.toDate?.().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase() || '2026',
             type: postData.type || 'Read',
@@ -88,7 +104,7 @@ export default function ArticleDetailPage() {
     );
   }
 
-  const hasAccess = isLoggedIn && hasJoinedCommunity;
+  const hasAccess = !!user;
   // Get image from article data (could be from Firebase or hardcoded)
   const articleImage = article.imageUrl || articleImages[postId];
 
@@ -231,54 +247,51 @@ export default function ArticleDetailPage() {
         <div className="fixed bottom-12 left-[calc(75%+35px)] md:left-[calc(75%+52.5px)] -translate-x-1/2 z-[70] max-w-[600px] w-full px-6">
           <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-8 shadow-2xl border-2 border-[#e8dfd0]">
             <h3 className="font-bold text-2xl text-[#4f4949] mb-3 text-center">
-              {!isLoggedIn ? 'Sign in to continue reading' : 'Join the community to unlock full access'}
+              Sign in to continue reading
             </h3>
             <p className="text-base text-[#504c4c] mb-6 text-center leading-6">
-              {!isLoggedIn 
-                ? 'Create a free Kyozo account to access full articles, audio content, and exclusive community features.'
-                : 'Become a member of Willer Universe to read full articles, listen to exclusive audio, and connect with fellow sound explorers.'
-              }
+              Create a free Kyozo account to access full articles, audio content, and exclusive community features.
             </p>
             <div className="flex flex-col gap-3">
-              {!isLoggedIn ? (
-                <>
-                  <button
-                    onClick={() => {
-                      setShowSignInModal(true);
-                    }}
-                    className="w-full bg-[#926b7f] text-white font-semibold py-3 px-6 rounded-full hover:bg-[#7d5a6b] transition-colors uppercase tracking-wide text-sm"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => router.back()}
-                    className="w-full bg-transparent border-2 border-[#e8dfd0] text-[#504c4c] font-semibold py-3 px-6 rounded-full hover:bg-[#f5f1e8] transition-colors uppercase tracking-wide text-sm"
-                  >
-                    Back to Feed
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => {
-                      setShowJoinCommunityModal(true);
-                    }}
-                    className="w-full bg-[#926b7f] text-white font-semibold py-3 px-6 rounded-full hover:bg-[#7d5a6b] transition-colors uppercase tracking-wide text-sm"
-                  >
-                    Join Community
-                  </button>
-                  <button
-                    onClick={() => router.back()}
-                    className="w-full bg-transparent border-2 border-[#e8dfd0] text-[#504c4c] font-semibold py-3 px-6 rounded-full hover:bg-[#f5f1e8] transition-colors uppercase tracking-wide text-sm"
-                  >
-                    Back to Feed
-                  </button>
-                </>
-              )}
+              <button
+                onClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
+                className="w-full bg-[#926b7f] text-white font-semibold py-3 px-6 rounded-full hover:bg-[#7d5a6b] transition-colors uppercase tracking-wide text-sm"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => router.back()}
+                className="w-full bg-transparent border-2 border-[#e8dfd0] text-[#504c4c] font-semibold py-3 px-6 rounded-full hover:bg-[#f5f1e8] transition-colors uppercase tracking-wide text-sm"
+              >
+                Back to Feed
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Unified Auth Dialog */}
+      <UnifiedAuthDialog
+        isOpen={dialogState.isSignUpOpen || dialogState.isSignInOpen}
+        onClose={() => setDialogState({ ...dialogState, isSignUpOpen: false, isSignInOpen: false })}
+        firstName={formState.firstName}
+        lastName={formState.lastName}
+        email={formState.email}
+        password={formState.password}
+        agreedToPrivacy={formState.agreedToPrivacy}
+        error={formState.error}
+        onFirstNameChange={(value: string) => handleFormChange('firstName', value)}
+        onLastNameChange={(value: string) => handleFormChange('lastName', value)}
+        onEmailChange={(value: string) => handleFormChange('email', value)}
+        onPasswordChange={(value: string) => handleFormChange('password', value)}
+        onAgreedToPrivacyChange={(value: boolean) => handleCheckboxChange('agreedToPrivacy', value)}
+        onSubmit={handleSignUp}
+        onGoogleSignIn={handleSignInWithGoogle}
+        onShowPrivacyPolicy={() => setDialogState({ ...dialogState, showPrivacyPolicy: true })}
+        onSendVerificationCode={handleSendVerificationCode}
+        onVerifyCode={handleVerifyCode}
+        communityName="Willer"
+      />
     </div>
   );
 }
