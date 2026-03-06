@@ -1,11 +1,8 @@
 /**
- * 📱 Mobile App Email API Integration Service
+ * � Resend Email Service
  * 
- * This service provides a robust email sending interface for mobile applications
- * following the KyozoVerse Email API integration guide.
- * 
- * Development API: http://localhost:9003/api/send-email
- * Production API: https://pro.kyozo.com/api/send-email
+ * This service provides direct integration with Resend API for sending emails
+ * without going through the KyozoVerse proxy.
  */
 
 export interface EmailRequest {
@@ -22,42 +19,21 @@ export interface EmailResponse {
 }
 
 export class EmailService {
-  private baseURL: string;
   private timeout: number;
 
-  constructor(config?: { baseURL?: string; timeout?: number }) {
-    this.baseURL = config?.baseURL || this.getBaseURL();
+  constructor(config?: { timeout?: number }) {
     this.timeout = config?.timeout || 10000;
   }
 
   /**
-   * Get the appropriate base URL based on environment
-   */
-  private getBaseURL(): string {
-    if (typeof window !== 'undefined') {
-      // Client-side
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return 'http://localhost:9003'; // Development
-      }
-      return 'https://pro.kyozo.com'; // Production
-    }
-    
-    // Server-side
-    if (process.env.NODE_ENV === 'development') {
-      return 'http://localhost:9003';
-    }
-    return 'https://pro.kyozo.com';
-  }
-
-  /**
-   * Send email with retry logic and error handling
+   * Send email using Resend API directly
    */
   async sendEmail(request: EmailRequest, maxRetries: number = 3): Promise<EmailResponse> {
     const lastError = new Error('Email sending failed after retries');
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const response = await this.performEmailRequest(request);
+        const response = await this.sendResendEmail(request);
         
         if (response.success) {
           this.logSuccess(request.to, response.id);
@@ -83,23 +59,28 @@ export class EmailService {
   }
 
   /**
-   * Perform the actual HTTP request
+   * Send email using Resend API
    */
-  private async performEmailRequest(request: EmailRequest): Promise<EmailResponse> {
-    const url = `${this.baseURL}/api/send-email`;
+  private async sendResendEmail(request: EmailRequest): Promise<EmailResponse> {
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
     
+    if (!RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: request.to,
-          from: request.from || 'Kyozo <willer@contact.kyozo.com>',
+          from: request.from || 'Kyozo <will@contact.kyozo.com>',
+          to: [request.to],
           subject: request.subject,
           html: request.html,
         }),
@@ -109,11 +90,12 @@ export class EmailService {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Resend API error: ${errorData.message || response.statusText}`);
       }
 
       const data = await response.json();
-      return data as EmailResponse;
+      return { success: true, id: data.id };
     } catch (error) {
       clearTimeout(timeoutId);
       

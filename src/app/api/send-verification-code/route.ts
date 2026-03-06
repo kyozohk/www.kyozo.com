@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { emailService } from '@/lib/email-service';
 import { db } from '@/firebase/admin';
 
 export async function POST(request: NextRequest) {
@@ -39,17 +38,41 @@ export async function POST(request: NextRequest) {
       throw firestoreError;
     }
     
-    // Send verification email using the email service
+    // Send verification email using direct Resend API
     console.log('📧 [VERIFICATION] Sending verification email...');
     try {
-      const response = await emailService.sendVerificationEmail(email, code, name);
+      const RESEND_API_KEY = process.env.RESEND_API_KEY;
       
-      console.log(`✅ Verification email sent to ${email}. Message ID: ${response.id}`);
+      if (!RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY is not configured');
+      }
+
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Kyozo <will@contact.kyozo.com>',
+          to: [email],
+          subject: '📧 Your Kyozo verification code',
+          html: getVerificationEmailTemplate(code, name),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Resend API error: ${errorData.message || response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log(`✅ Verification email sent to ${email}. Message ID: ${data.id}`);
       
       return NextResponse.json({ 
         success: true,
         message: 'Verification code sent successfully',
-        messageId: response.id,
+        messageId: data.id,
         // In development, return the code for testing
         ...(process.env.NODE_ENV === 'development' && { code })
       });
@@ -89,4 +112,40 @@ export async function POST(request: NextRequest) {
       error: 'Internal server error' 
     }, { status: 500 });
   }
+}
+
+function getVerificationEmailTemplate(code: string, recipientName?: string): string {
+  const name = recipientName || 'there';
+  
+  return `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #f4f4f5;">
+      <div style="background: linear-gradient(135deg, #926b7f 0%, #7d5a6b 100%); color: white; padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
+        <h1 style="margin: 0; font-size: 32px; font-weight: 700;">📧 Verify Your Email</h1>
+        <p style="margin: 10px 0 0; opacity: 0.9;">Hi ${name},</p>
+      </div>
+      
+      <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h2 style="color: #4f4949; margin: 0 0 20px; font-size: 24px;">Your Verification Code</h2>
+        
+        <div style="background: #f5f1e8; padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center; border: 2px solid #e8dfd0;">
+          <span style="font-size: 36px; font-weight: bold; color: #926b7f; letter-spacing: 8px; font-family: 'Courier New', monospace;">${code}</span>
+        </div>
+        
+        <div style="background: #fef7e0; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f0c679;">
+          <p style="margin: 0; color: #504c4c; font-size: 14px;">
+            <strong>⏰ This code will expire in 10 minutes.</strong><br>
+            Please enter it in the verification form to complete your registration.
+          </p>
+        </div>
+        
+        <p style="color: #978f82; font-size: 12px; margin: 30px 0 0; text-align: center;">
+          If you didn't request this code, please ignore this email. Your account remains secure.
+        </p>
+      </div>
+      
+      <div style="text-align: center; padding: 20px; color: #978f82; font-size: 12px;">
+        <p>© 2024 Kyozo. Building the future of creative communities.</p>
+      </div>
+    </div>
+  `;
 }
