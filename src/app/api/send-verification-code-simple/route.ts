@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
       
       console.log('📧 [SIMPLE] RESEND_API_KEY exists:', !!RESEND_API_KEY);
       console.log('📧 [SIMPLE] RESEND_API_KEY length:', RESEND_API_KEY?.length || 0);
+      console.log('📧 [SIMPLE] RESEND_API_KEY prefix:', RESEND_API_KEY?.substring(0, 15) + '...');
       
       if (!RESEND_API_KEY) {
         throw new Error('RESEND_API_KEY is not configured');

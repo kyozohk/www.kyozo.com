@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Willer Poole – Notes on Creativity, Music, and Process',
-    description: 'A personal space where Hong Kong DJ and curator Willer Poole shares concise reflections on creativity, music, and the artistic process—offering honest insights, experiments, and ideas behind his work.',
+    title: 'Willer - Welcome to the Willer Universe',
+    description: 'A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.',
     images: ['/og-image.png'],
   },
   icons: {
