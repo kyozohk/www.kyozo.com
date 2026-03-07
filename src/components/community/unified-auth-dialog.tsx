@@ -206,7 +206,11 @@ export const UnifiedAuthDialog: React.FC<UnifiedAuthDialogProps> = ({
     try {
       const isValid = await onVerifyCode(verificationCode);
       if (isValid) {
-        onSubmit();
+        await onSubmit();
+        // Close the dialog after successful signup
+        setTimeout(() => {
+          onClose();
+        }, 100);
       } else {
         setVerificationError('Invalid code. Please try again.');
         setCode(['', '', '', '']);
