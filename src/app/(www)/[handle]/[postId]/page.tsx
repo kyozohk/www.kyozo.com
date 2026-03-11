@@ -178,9 +178,9 @@ export default function ArticleDetailPage() {
       </div>
 
       {/* Right Half - Article content */}
-      <div className="w-full bg-white overflow-hidden flex flex-col">
-        {/* Mobile close button - sticky header */}
-        <div className="md:hidden sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-[#e8dfd0] p-4">
+      <div className="w-full md:w-1/2 bg-white overflow-hidden flex flex-col relative">
+        {/* Close button - sticky header for mobile, absolute for desktop */}
+        <div className="sticky md:absolute top-0 right-0 z-10 bg-white/95 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border-b md:border-0 border-[#e8dfd0] p-4">
           <button
             onClick={() => router.back()}
             className="flex items-center gap-2 text-[#504c4c] hover:text-[#926b7f] transition-colors"
@@ -266,9 +266,9 @@ export default function ArticleDetailPage() {
       </div>
       </div>
 
-      {/* Fixed floating sign-in card - bottom center on mobile, right panel on desktop */}
+      {/* Fixed floating sign-in card - bottom center on mobile, centered in right panel on desktop */}
       {!hasAccess && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-[calc(75%+52.5px)] md:translate-x-0 z-40 max-w-[400px] md:max-w-[600px] w-full px-4 md:px-6">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-3/4 md:-translate-x-1/2 z-40 max-w-[400px] md:max-w-[500px] w-full px-4 md:px-6">
           <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-6 md:p-8 shadow-2xl border-2 border-[#e8dfd0]">
             <h3 className="font-bold text-2xl text-[#4f4949] mb-3 text-center">
               Sign in to continue reading
