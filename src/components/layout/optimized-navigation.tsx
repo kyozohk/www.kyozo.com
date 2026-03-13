@@ -256,7 +256,7 @@ export function OptimizedNavigation({ onSignInClick, onJoinClick, profileImage, 
                         <img 
                           alt="Kyozo Logo" 
                           className="w-3/4 h-3/4 object-contain" 
-                          src="/kyozo-logo.svg" 
+                          src="/favicon.svg" 
                         />
                       </div>
                     )}
