@@ -50,7 +50,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
             <img 
               alt="Profile" 
               className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
-              src={profileImage || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop"} 
+              src={profileImage} 
             />
           </div>
         </div>
