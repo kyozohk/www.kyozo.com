@@ -47,11 +47,21 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
         {/* Profile Image */}
         <div className="relative shrink-0">
           <div className="relative rounded-full shadow-[0px_0px_0px_2px_#e8dfd0] shrink-0 size-[38px]">
-            <img 
-              alt="Profile" 
-              className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
-              src={profileImage} 
-            />
+            {profileImage ? (
+              <img 
+                alt="Profile" 
+                className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
+                src={profileImage} 
+              />
+            ) : (
+              <div className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full bg-[#f5f1e8] flex items-center justify-center">
+                <img 
+                  alt="Kyozo Logo" 
+                  className="w-3/4 h-3/4 object-contain" 
+                  src="/favicon.svg" 
+                />
+              </div>
+            )}
           </div>
         </div>
 

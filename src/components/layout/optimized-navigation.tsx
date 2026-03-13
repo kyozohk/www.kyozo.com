@@ -133,11 +133,21 @@ export function OptimizedNavigation({ onSignInClick, onJoinClick, profileImage, 
         {/* Profile Image */}
         <div className="relative shrink-0">
           <div className="relative rounded-full shadow-[0px_0px_0px_2px_#e8dfd0] shrink-0 size-[38px]">
-            <img 
-              alt="Profile" 
-              className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
-              src={profileImage } 
-            />
+            {profileImage ? (
+              <img 
+                alt="Profile" 
+                className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
+                src={profileImage } 
+              />
+            ) : (
+              <div className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full bg-[#f5f1e8] flex items-center justify-center">
+                <img 
+                  alt="Kyozo Logo" 
+                  className="w-3/4 h-3/4 object-contain" 
+                  src="/kyozo-logo.svg" 
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -235,11 +245,21 @@ export function OptimizedNavigation({ onSignInClick, onJoinClick, profileImage, 
               <div className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center gap-3">
                   <div className="relative rounded-full shadow-[0px_0px_0px_2px_#e8dfd0] shrink-0 size-[38px]">
-                    <img 
-                      alt="Profile" 
-                      className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
-                      src={profileImage} 
-                    />
+                    {profileImage ? (
+                      <img 
+                        alt="Profile" 
+                        className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full" 
+                        src={profileImage} 
+                      />
+                    ) : (
+                      <div className="absolute bg-clip-padding border-0 border-transparent max-w-none object-cover rounded-full size-full bg-[#f5f1e8] flex items-center justify-center">
+                        <img 
+                          alt="Kyozo Logo" 
+                          className="w-3/4 h-3/4 object-contain" 
+                          src="/kyozo-logo.svg" 
+                        />
+                      </div>
+                    )}
                   </div>
                   <div>
                     <p className="font-bold text-[#4f4949]">{handle || 'Willer'}</p>

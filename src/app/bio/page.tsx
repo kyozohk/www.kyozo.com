@@ -35,11 +35,21 @@ export default function BioPage() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <img
-                src={communityData?.communityProfileImage}
-                alt="Willer's profile"
-                className="size-[120px] md:size-[140px] rounded-full object-cover shadow-lg border-4 border-[#e8dfd0]"
-              />
+              {communityData?.communityProfileImage ? (
+                <img
+                  src={communityData?.communityProfileImage}
+                  alt="Willer's profile"
+                  className="size-[120px] md:size-[140px] rounded-full object-cover shadow-lg border-4 border-[#e8dfd0]"
+                />
+              ) : (
+                <div className="size-[120px] md:size-[140px] rounded-full bg-[#f5f1e8] flex items-center justify-center shadow-lg border-4 border-[#e8dfd0]">
+                  <img
+                    src="/kyozo-logo.svg"
+                    alt="Kyozo Logo"
+                    className="w-3/4 h-3/4 object-contain"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
