@@ -76,7 +76,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
         {/* Navigation Links */}
         <div className="flex flex-col gap-[12px] items-center">
           {/* About Link */}
-          <Link
+          {/* <Link
             href={handle ? `/${handle}/about` : "/about"}
             className={`flex flex-col h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors ${
               (handle && pathname === `/${handle}/about`) || (!handle && pathname === "/about") ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
@@ -108,7 +108,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
               </div>
             </div>
             <p className="font-semibold leading-[16px] text-[11px] text-[rgba(79,73,73,0.9)] text-center">About</p>
-          </Link>
+          </Link> */}
 
           {/* Feed Link */}
           <Link
