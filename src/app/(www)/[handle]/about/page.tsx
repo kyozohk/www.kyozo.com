@@ -40,7 +40,7 @@ export default function AboutPage() {
   return (
     <div className="relative min-h-screen bg-[#bfbebd] flex">
       <WillerSidebar 
-        profileImage={communityData?.communityProfileImage || imgEllipse1}
+        profileImage={communityData?.communityProfileImage}
         handle={handle}
         onSignInClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
         onJoinClick={() => setDialogState({ ...dialogState, isSignUpOpen: true, isSignInOpen: false })}

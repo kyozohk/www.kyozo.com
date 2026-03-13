@@ -36,7 +36,7 @@ export default function BioPage() {
             </div>
             <div className="flex-shrink-0">
               <img
-                src={communityData?.communityProfileImage || imgEllipse1}
+                src={communityData?.communityProfileImage}
                 alt="Willer's profile"
                 className="size-[120px] md:size-[140px] rounded-full object-cover shadow-lg border-4 border-[#e8dfd0]"
               />

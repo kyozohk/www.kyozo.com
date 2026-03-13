@@ -209,7 +209,7 @@ export default function PublicCommunityPage() {
     <div className="relative min-h-screen flex" style={{ backgroundColor: '#d6d4c9' }}>
       {/* Sidebar */}
       <WillerSidebar
-        profileImage={communityData?.communityProfileImage || imgEllipse1}
+        profileImage={communityData?.communityProfileImage}
         handle={handle}
         onSignInClick={() => setDialogState({ ...dialogState, isSignInOpen: true, isSignUpOpen: false })}
         onJoinClick={() => setDialogState({ ...dialogState, isSignUpOpen: true, isSignInOpen: false })}
