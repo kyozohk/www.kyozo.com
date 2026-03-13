@@ -60,7 +60,8 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
           href={handle ? `/${handle}` : "/"}
           className="h-[34px] relative rounded-[10px] shrink-0 w-[56px] flex flex-col items-center hover:bg-[#f5f1e8] transition-colors cursor-pointer"
         >
-          <p className="font-bold leading-[16px] text-[#4f4949] text-[12px] text-center">{handle || 'Willer'}</p>
+          {/* <p className="font-bold leading-[16px] text-[#4f4949] text-[12px] text-center">{handle || 'Willer'}</p> */}
+          <p className="font-bold leading-[16px] text-[#4f4949] text-[12px] text-center">Willer</p>
           <p className="font-bold leading-[16px] text-[#4f4949] text-[12px] text-center whitespace-pre-wrap">Universe</p>
         </Link>
       </div>
@@ -202,7 +203,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
       </div>
 
       {/* Modal Link - Bottom */}
-      <Link
+      {/* <Link
         href="/modal"
         className={`flex flex-col gap-[2px] h-[62px] items-center justify-center rounded-[10px] w-[56px] transition-colors mb-[10px] ${
           pathname === "/modal" ? "bg-[#e8dfd0]" : "hover:bg-[#f5f1e8]"
@@ -221,7 +222,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
           </svg>
         </div>
         <p className="font-semibold leading-[16px] text-[12px] text-[rgba(79,73,73,0.9)] text-center">Modal</p>
-      </Link>
+      </Link> */}
     </aside>
   );
 }
