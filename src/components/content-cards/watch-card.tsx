@@ -202,7 +202,7 @@ export function WatchCard({ category, title, imageUrl, imageHint, isPrivate, pos
         )}
         
         <Link href={`/willer/${post.id}`} className="block h-full">
-        <div className="relative bg-neutral-900 overflow-hidden group cursor-pointer transition-shadow duration-300 hover:shadow-lg rounded-2xl flex flex-col md:flex-col h-[400px] md:h-[400px] md:style={cardStyle}" style={{ backgroundColor: '#1a1a1a' }}>
+        <div className="relative bg-neutral-900 overflow-hidden group cursor-pointer transition-shadow duration-300 hover:shadow-lg rounded-2xl flex flex-col md:flex-col h-[400px] md:h-[400px]" style={cardStyle}>
         {/* Black overlay - only on desktop */}
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors hidden md:block" />
         

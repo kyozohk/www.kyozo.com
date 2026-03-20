@@ -113,13 +113,22 @@ function PostList({ filter }: { filter: string }) {
           />
         );
       case 'video':
+        const thumbnailUrl = post.content?.thumbnailUrl || post.content?.mediaUrls?.[0] || '';
+        console.log('🎥 Video post rendering (www.kyozo.com):', {
+          postId: post.id,
+          title: post.title,
+          thumbnailUrl: post.content?.thumbnailUrl,
+          videoUrl: post.content?.mediaUrls?.[0],
+          usingThumbnail: !!post.content?.thumbnailUrl,
+          finalImageUrl: thumbnailUrl
+        });
         return (
           <WatchCard
             key={post.id}
             post={post}
             category="Video"
             title={post.title || 'Untitled'}
-            imageUrl={post.content?.mediaUrls?.[0] || ''}
+            imageUrl={thumbnailUrl}
             imageHint=""
             isPrivate={post.visibility === 'private'}
           />
@@ -150,22 +159,73 @@ function PostList({ filter }: { filter: string }) {
   }
 
   const filteredPosts = posts.filter((post) => shouldShowPost(post.type));
-  const postRows: (Post & { id: string })[][] = [];
-  for (let i = 0; i < filteredPosts.length; i += 2) {
-    postRows.push(filteredPosts.slice(i, i + 2));
+  
+  // Build rows respecting fillRow flag
+  const rows: JSX.Element[] = [];
+  let currentRow: (Post & { id: string })[] = [];
+  
+  filteredPosts.forEach((post) => {
+    if (post.fillRow) {
+      // If there's a pending row, render it first
+      if (currentRow.length > 0) {
+        const rowKey = `row-${rows.length}`;
+        rows.push(
+          <div key={rowKey} className="flex flex-col md:flex-row gap-6">
+            {currentRow.map((p) => (
+              <div key={p.id} className="flex-1 min-h-[400px]">
+                {renderCard(p)}
+              </div>
+            ))}
+          </div>
+        );
+        currentRow = [];
+      }
+      // Render full-width post
+      rows.push(
+        <div key={post.id} className="w-full">
+          <div className="min-h-[400px]">
+            {renderCard(post)}
+          </div>
+        </div>
+      );
+    } else {
+      // Add to current row
+      currentRow.push(post);
+      
+      // If row is full (2 items), render it
+      if (currentRow.length === 2) {
+        const rowKey = `row-${rows.length}`;
+        rows.push(
+          <div key={rowKey} className="flex flex-col md:flex-row gap-6">
+            {currentRow.map((p) => (
+              <div key={p.id} className="flex-1 min-h-[400px]">
+                {renderCard(p)}
+              </div>
+            ))}
+          </div>
+        );
+        currentRow = [];
+      }
+    }
+  });
+  
+  // Render any remaining posts in the current row
+  if (currentRow.length > 0) {
+    const rowKey = `row-${rows.length}`;
+    rows.push(
+      <div key={rowKey} className="flex flex-col md:flex-row gap-6">
+        {currentRow.map((p) => (
+          <div key={p.id} className="flex-1 min-h-[400px]">
+            {renderCard(p)}
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col gap-4 md:gap-6">
-      {postRows.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex flex-col md:flex-row gap-6">
-          {row.map((post) => (
-            <div key={post.id} className="flex-1 min-h-[400px]">
-              {renderCard(post)}
-            </div>
-          ))}
-        </div>
-      ))}
+      {rows}
     </div>
   );
 }
