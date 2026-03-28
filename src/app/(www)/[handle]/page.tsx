@@ -16,6 +16,8 @@ import { FeedSkeletons } from '@/components/community/feed/skeletons';
 import { ReadCard } from '@/components/content-cards/read-card';
 import { ListenCard } from '@/components/content-cards/listen-card';
 import { WatchCard } from '@/components/content-cards/watch-card';
+import { PoetryCard } from '@/components/content-cards/poetry-card';
+import { PostDetailPanel } from '@/components/community/feed/post-detail-panel';
 import { UnifiedAuthDialog } from '@/components/community/unified-auth-dialog';
 import { PrivacyPolicyDialog } from '@/components/auth/privacy-policy-dialog';
 import { useAuthWithVerification } from '@/hooks/use-auth-with-verification';
@@ -135,6 +137,19 @@ function PostList({ filter }: { filter: string }) {
         );
       case 'text':
       default:
+        if (post.isPoetry) {
+          return (
+            <PoetryCard
+              key={post.id}
+              post={post}
+              category="Text"
+              date={getPostDate(post)}
+              title={post.title || 'Untitled'}
+              isPrivate={post.visibility === 'private'}
+              onClick={() => setSelectedPost(post)}
+            />
+          );
+        }
         return (
           <ReadCard
             key={post.id}
@@ -224,9 +239,16 @@ function PostList({ filter }: { filter: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
-      {rows}
-    </div>
+    <>
+      <div className="flex flex-col gap-4 md:gap-6">
+        {rows}
+      </div>
+      <PostDetailPanel
+        post={selectedPost}
+        isOpen={!!selectedPost}
+        onClose={() => setSelectedPost(null)}
+      />
+    </>
   );
 }
 

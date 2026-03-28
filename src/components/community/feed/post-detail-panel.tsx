@@ -5,6 +5,7 @@ import { type Post } from '@/lib/types';
 import { TextPostCard } from './text-post-card';
 import { AudioPostCard } from './audio-post-card';
 import { VideoPostCard } from './video-post-card';
+import { PoetryPostCard } from './poetry-post-card';
 
 interface PostDetailPanelProps {
   post: (Post & { id: string }) | null;
@@ -34,7 +35,8 @@ export function PostDetailPanel({ post, isOpen, onClose }: PostDetailPanelProps)
         {/* Header with close button */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">
-            {post.type === 'text' || post.type === 'image' ? 'Read' : 
+            {post.isPoetry ? 'Poetry' :
+             post.type === 'text' || post.type === 'image' ? 'Read' : 
              post.type === 'audio' ? 'Listen' : 
              post.type === 'video' ? 'Watch' : 'View'}
           </h2>
@@ -50,7 +52,10 @@ export function PostDetailPanel({ post, isOpen, onClose }: PostDetailPanelProps)
         {/* Content */}
         <div className="p-6">
           {/* Render the appropriate card component */}
-          {(post.type === 'text' || post.type === 'image') && (
+          {post.isPoetry && (
+            <PoetryPostCard post={post} />
+          )}
+          {!post.isPoetry && (post.type === 'text' || post.type === 'image') && (
             <TextPostCard post={post} />
           )}
           {post.type === 'audio' && (

@@ -68,6 +68,8 @@ export type Post = {
   comments: number;
   createdAt: any; // Firestore Timestamp
   visibility: 'public' | 'private' | 'members-only';
+  fillRow?: boolean; // If true, post takes full width of the row
+  isPoetry?: boolean; // If true, content is split into pages by double newlines
 };
 
 
