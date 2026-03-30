@@ -147,9 +147,9 @@ export const PoetryPostCard: React.FC<PoetryPostCardProps> = ({ post }) => {
               aria-label="Next paragraph"
             />
 
-            {/* Poetry text - meme style (large, centered) */}
+            {/* Poetry text - left-aligned, normal weight */}
             <div className="max-w-2xl w-full px-8">
-              <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-center whitespace-pre-line leading-relaxed text-gray-800">
+              <p className="text-2xl md:text-3xl lg:text-4xl font-normal text-left whitespace-pre-line leading-relaxed text-gray-800">
                 {chunks[currentPage]}
               </p>
             </div>

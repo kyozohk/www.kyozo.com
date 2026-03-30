@@ -65,7 +65,7 @@ export function PoetryCard({ post, category, date, title, isPrivate, onClick }: 
 
         {/* First paragraph preview */}
         <div className="flex-grow overflow-hidden">
-          <p className="text-sm md:text-base whitespace-pre-line leading-relaxed line-clamp-6" style={{ color: CARD_BODY_COLOR }}>
+          <p className="text-lg md:text-xl whitespace-pre-line leading-relaxed line-clamp-6 text-left font-normal" style={{ color: CARD_BODY_COLOR }}>
             {chunks[0]}
           </p>
         </div>
