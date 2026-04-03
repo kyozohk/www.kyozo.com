@@ -55,7 +55,7 @@ export function Home() {
               backgroundImage: "linear-gradient(166.8195deg, rgb(90, 155, 185) 11.465%, rgb(75, 135, 170) 106.65%)",
               WebkitTextFillColor: "transparent",
             }}
-          >Welcome to the Willer Universe</h2>
+          >Welcome to the Willer.fm community</h2>
           <p className="font-normal leading-[22px] md:leading-normal text-[#68a5ba] text-[15px] md:text-[18px]">A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.</p>
         </div>
         <div className="flex-shrink-0 hidden md:block">

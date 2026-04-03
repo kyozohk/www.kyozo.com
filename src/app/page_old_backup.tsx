@@ -524,7 +524,7 @@ export default function LandingPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Welcome to the Willer Universe
+                Welcome to the Willer.fm community
               </h2>
               {/* Updated text-[#4d5f71] to text-[#94a3b8] */}
               <p className="text-sm md:text-2xl text-[#94a3b8] font-normal leading-[22px] md:leading-normal">

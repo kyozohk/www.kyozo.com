@@ -9,10 +9,10 @@ import { CommunityAuthProvider } from '@/hooks/use-community-auth';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-    title: 'Willer - Welcome to the Willer Universe',
+    title: 'Willer - Welcome to the Willer.fm community',
     description: 'A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.',
   openGraph: {
-    title: 'Willer - Welcome to the Willer Universe',
+    title: 'Willer - Welcome to the Willer.fm community',
     description: 'A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.',
     images: [
       {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Willer - Welcome to the Willer Universe',
+    title: 'Willer - Welcome to the Willer.fm community',
     description: 'A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.',
     images: ['/og-image.png'],
   },
