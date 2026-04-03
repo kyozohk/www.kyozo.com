@@ -128,7 +128,7 @@ export function OptimizedNavigation({ onSignInClick, onJoinClick, profileImage, 
         <div className="bg-[rgba(0,0,0,0.1)] h-px w-full" />
       </div>
 
-      {/* Willer Universe Section */}
+      {/* Willer.fm community Section */}
       <div className="flex flex-col items-center gap-[8px] py-[8px]">
         {/* Profile Image */}
         <div className="relative shrink-0">
@@ -228,7 +228,7 @@ export function OptimizedNavigation({ onSignInClick, onJoinClick, profileImage, 
               <path d={sidebarIcons.kyozoBrand} fill="#3F3F3F" />
             </svg>
           </div>
-          <span className="font-bold text-[#4f4949] text-lg">{handle || 'Willer'} Universe</span>
+          <span className="font-bold text-[#4f4949] text-lg">{handle || 'Willer'} Community</span>
         </Link>
 
         {/* Mobile Menu Trigger */}

@@ -43,7 +43,7 @@ export default function CommunityPage() {
       );
 
       if (success) {
-        setSubmitMessage(`Welcome to Willer Universe! We'll send updates to ${email}`);
+        setSubmitMessage(`Welcome to Willer.fm community! We'll send updates to ${email}`);
         setEmail("");
       } else {
         setSubmitMessage("Failed to join community. Please try again.");
@@ -75,7 +75,7 @@ export default function CommunityPage() {
               </div>
             </div>
             <h1 className="font-bold text-5xl text-[#4f4949] tracking-[-1px] mb-4">
-              Join the Willer Universe Community
+              Join the Willer.fm community Community
             </h1>
             <p className="text-xl text-[#6b6b6b] leading-relaxed max-w-[700px] mx-auto">
               Connect with fellow explorers at the intersection of sound, consciousness, and creative evolution
@@ -103,7 +103,7 @@ export default function CommunityPage() {
                     disabled={isSubmitting}
                     className="bg-[#ffdea8] border-2 border-[#ffdea8] px-8 py-4 rounded-xl font-bold text-lg text-[#212e39] hover:bg-[#f5d49a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Joining..." : "Join Willer Universe Community"}
+                    {isSubmitting ? "Joining..." : "Join Willer.fm community Community"}
                   </button>
                 </div>
               ) : (
@@ -122,7 +122,7 @@ export default function CommunityPage() {
                     disabled={isSubmitting}
                     className="bg-[#ffdea8] border-2 border-[#ffdea8] px-8 py-4 rounded-xl font-bold text-lg text-[#212e39] hover:bg-[#f5d49a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Joining..." : "Join Willer Universe Community"}
+                    {isSubmitting ? "Joining..." : "Join Willer.fm community Community"}
                   </button>
                 </form>
               )}
@@ -179,7 +179,7 @@ export default function CommunityPage() {
                 </h3>
                 <p className="text-base text-[#504c4c] leading-6">
                   Be the first to experience new releases, sound experiments, and creative projects. Get a 
-                  front-row seat to the evolution of Willer Universe.
+                  front-row seat to the evolution of Willer.fm community.
                 </p>
               </div>
 
@@ -205,7 +205,7 @@ export default function CommunityPage() {
             </h2>
             <div className="max-w-[700px] mx-auto space-y-4">
               <p className="text-base text-[#504c4c] leading-7">
-                Willer Universe isn't just a platform—it's a living space for exploration and dialogue. 
+                Willer.fm community isn't just a platform—it's a living space for exploration and dialogue. 
                 This community exists for those who seek to understand the deeper dimensions of sound, 
                 creativity, and consciousness.
               </p>

@@ -118,7 +118,7 @@ Every entry is an experiment, a question posed to the universe: What if we appro
 
 In our culture, we're conditioned to value finished products over the messy, uncertain process of creation. We want the album, not the demo. The published book, not the rough draft. But what if we flipped that around? What if we celebrated the in-between states, the works in progress, the half-formed ideas that contain the seeds of something beautiful?
 
-This is what Willer Universe represents—a commitment to documenting the creative journey in real time, without waiting for everything to be perfect or complete. It's vulnerable work, sharing the process while you're still in the midst of it. But it's also honest and human.
+This is what Willer.fm community represents—a commitment to documenting the creative journey in real time, without waiting for everything to be perfect or complete. It's vulnerable work, sharing the process while you're still in the midst of it. But it's also honest and human.
 
 Each piece in this collection—whether text, audio, or visual—is a snapshot of a particular moment in time. A thought captured mid-flight. A sound experiment that might never become a "real" song. A meditation on a theme that's still unfolding.
 

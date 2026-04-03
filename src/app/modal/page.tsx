@@ -70,7 +70,7 @@ export default function ModalPage() {
 
         {/* Bottom Section: Switch to Willer & Kyozo Home */}
         <div className="mt-auto flex flex-col gap-3 md:gap-4 items-center pb-2">
-          {/* Switch to Willer Universe */}
+          {/* Switch to Willer.fm community */}
           <Link 
             href="/"
             className="bg-[#334155] content-stretch flex flex-col items-center justify-center rounded-[10px] md:rounded-[13px] shrink-0 w-[48px] h-[48px] md:size-[60px] hover:bg-[#475569] transition-colors"

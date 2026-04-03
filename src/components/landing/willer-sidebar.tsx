@@ -42,7 +42,7 @@ export function WillerSidebar({ onSignInClick, onJoinClick, profileImage, handle
         <div className="bg-[rgba(0,0,0,0.1)] h-px w-full" />
       </div>
 
-      {/* Willer Universe Section */}
+      {/* Willer.fm community Section */}
       <div className="flex flex-col items-center gap-[8px] py-[8px]">
         {/* Profile Image */}
         <div className="relative shrink-0">

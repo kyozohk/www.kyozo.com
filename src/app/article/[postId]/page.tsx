@@ -105,7 +105,7 @@ export default function ArticleDetailPage() {
                   <p className="text-base text-[#504c4c] mb-6 text-center leading-6">
                     {!isLoggedIn 
                       ? 'Create a free Kyozo account to access full articles, audio content, and exclusive community features.'
-                      : 'Become a member of Willer Universe to read full articles, listen to exclusive audio, and connect with fellow sound explorers.'
+                      : 'Become a member of Willer.fm community to read full articles, listen to exclusive audio, and connect with fellow sound explorers.'
                     }
                   </p>
                   <div className="flex flex-col gap-3">

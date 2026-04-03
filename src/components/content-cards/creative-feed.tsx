@@ -16,7 +16,7 @@ export function CreativeFeed() {
         <div className="flex flex-row items-center w-full">
           <div className="content-stretch flex items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-3.5 lg:py-4 relative w-full">
             <p className="font-['DM_Sans',sans-serif] font-bold leading-tight md:leading-[30px] lg:leading-[36.029px] relative shrink-0 text-[#93adae] text-[24px] md:text-[30px] lg:text-[36.696px] tracking-[-1px] md:tracking-[-1.2px] lg:tracking-[-1.3344px]">
-              Willer Universe
+              Willer.fm community
             </p>
             <div className="hidden md:block">
               {/* Navigation can be made a component later */}
