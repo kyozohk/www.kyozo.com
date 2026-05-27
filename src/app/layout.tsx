@@ -30,8 +30,20 @@ export const metadata: Metadata = {
     description: 'A living journal of ideas, process, and creative evolution. Home to MODAL - Creativity, Music and the Mind.',
     images: ['/og-image.png'],
   },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Willer',
+    statusBarStyle: 'default',
+  },
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 

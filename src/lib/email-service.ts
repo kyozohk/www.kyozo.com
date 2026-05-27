@@ -197,7 +197,7 @@ export class EmailService {
         </div>
         
         <div style="background: white; padding: 40px 30px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-          <h2 style="color: #4f4949; margin: 0 0 20px; font-size: 24px;">Welcome to the Community!</h2>
+        <h2 style="color: #4f4949; margin: 0 0 20px; font-size: 24px;">Welcome to the Community!</h2>
           
           <p style="color: #504c4c; line-height: 1.6; margin: 0 0 30px;">
             We're excited to have you join our creative community. Your account is now ready and you can start exploring everything Kyozo has to offer.
